@@ -57,7 +57,7 @@ public class ProdukDao {
                 "\tt.barcode\n" +
                 "from\n" +
                 "\ttrproduct t\n" +
-                "where t.barcode = :barcode";
+                "where 1 = 1 \t";
         StringBuilder query = new StringBuilder(baseQuery);
 
         MapSqlParameterSource map = new MapSqlParameterSource();
