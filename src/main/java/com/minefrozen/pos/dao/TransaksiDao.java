@@ -24,7 +24,7 @@ public class TransaksiDao {
         map.addValue("kodeTransaksi", tambahTransaksi.getKodeTransaksi());
         map.addValue("jenisPembayaran", tambahTransaksi.getJenisPembayaran());
         map.addValue("nomorKasir", tambahTransaksi.getNomorKasir());
-        map.addValue("iPgunRekam", tambahTransaksi.getIPgunRekam());
+        map.addValue("iPgunRekam", 1);
         jdbcTemplate.update(query, map);
     }
 
