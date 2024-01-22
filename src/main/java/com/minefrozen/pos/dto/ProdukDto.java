@@ -20,7 +20,7 @@ public class ProdukDto {
         private BigDecimal hargaJual;
         private BigDecimal diskon;
         private Integer berat;
-        private BigInteger barcode;
+        private String barcode;
     }
 
 }

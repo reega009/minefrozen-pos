@@ -2,12 +2,14 @@ package com.minefrozen.pos.dao;
 
 import com.minefrozen.pos.dto.ProdukDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +17,10 @@ import java.util.Optional;
 public class ProdukDao {
 
     @Autowired
+    @Qualifier("posJdbc")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(Integer barcode){
+    public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(String barcode){
         String query = "select\n" +
                 "\tt.i_id as id,\n" +
                 "\tt.kode_product as kodeProduct,\n" +

@@ -17,7 +17,7 @@ public class ProdukController {
     private ProdukService service;
 
     @GetMapping("/findProdukByBarcode")
-    public ResponseEntity<?> findProdukByBarcode(@RequestParam Integer barcode){
+    public ResponseEntity<?> findProdukByBarcode(@RequestParam String barcode){
         Optional<ProdukDto.ProdukKasir> data = service.findProdukByBarcode(barcode);
         if (!data.isPresent()) {
             return ResponseEntity.noContent().build();

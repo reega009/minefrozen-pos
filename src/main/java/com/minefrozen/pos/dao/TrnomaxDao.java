@@ -1,6 +1,7 @@
 package com.minefrozen.pos.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 public class TrnomaxDao {
 
     @Autowired
+    @Qualifier("posJdbc")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public Integer findNoMax(String namaTabel){

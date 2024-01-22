@@ -2,6 +2,7 @@ package com.minefrozen.pos.dao;
 
 import com.minefrozen.pos.dto.TransaksiDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public class TransaksiDao {
 
     @Autowired
+    @Qualifier("posJdbc")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public void tambahTransaksi(TransaksiDto.TambahTransaksi tambahTransaksi){
