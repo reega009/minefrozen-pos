@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class TransaksiDto {
@@ -19,6 +20,7 @@ public class TransaksiDto {
         private Integer nomorKasir;
         private String kodeTransaksi;
         private Integer iPgunRekam;
+        private Timestamp dPgunRekam;
         private List<TambahTransaksiRinci> transaksiRinci;
 
     }
@@ -28,6 +30,7 @@ public class TransaksiDto {
     @NoArgsConstructor
     public static class TambahTransaksiRinci{
         private Integer idTransaksi;
+        private Integer idStore;
         private Integer idProduk;
         private Date expiredDate;
         private Integer qty;

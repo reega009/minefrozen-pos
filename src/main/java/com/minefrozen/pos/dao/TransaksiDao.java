@@ -3,6 +3,7 @@ package com.minefrozen.pos.dao;
 import com.minefrozen.pos.dto.TransaksiDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -30,14 +31,21 @@ public class TransaksiDao {
 
     public void tambahTransaksiRinci(TransaksiDto.TambahTransaksiRinci rinci){
         String query = "INSERT INTO tmtransaksirinci\n" +
-                "(id_transaksi, id_produk, expired_date, qty)\n" +
-                "VALUES(:idTransaksi, :idProduk, :expiredDate, :qty)\n";
+                "(id_transaksi, id_produk, id_store, expired_date, qty)\n" +
+                "VALUES(:idTransaksi, :idProduk, :idStore, :expiredDate, :qty)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi", rinci.getIdTransaksi());
         map.addValue("idProduk", rinci.getIdProduk());
+        map.addValue("idStore", rinci.getIdStore());
         map.addValue("expiredDate", rinci.getExpiredDate());
         map.addValue("qty", rinci.getQty());
         jdbcTemplate.update(query, map);
+    }
+
+    public Integer countTransaksiToday(Integer idStore){
+        String query = "select count(i_id) + 1 from tmtransaksi t where id_store = :idStore and d_pgun_rekam::date = CURRENT_TIMESTAMP::date\n";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        return jdbcTemplate.queryForObject(query, map, new BeanPropertyRowMapper<>(Integer.class));
     }
 
 }

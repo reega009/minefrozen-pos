@@ -2,6 +2,7 @@ package com.minefrozen.pos.dao;
 
 import com.minefrozen.pos.dto.DiskonProdukDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class DiskonProdukDao {
 
     @Autowired
+    @Qualifier("posJdbc")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
 

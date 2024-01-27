@@ -21,6 +21,9 @@ public class TransaksiService {
     @Autowired
     private TrnomaxDao noMaxDao;
 
+    @Autowired
+    private PosToServerService serverService;
+
     @Transactional
     public void TambahTransaksi(TransaksiDto.TambahTransaksi request){
 
@@ -30,11 +33,14 @@ public class TransaksiService {
         String formattedDate = currentDate.format(formatter);
 
         try{
+            // Get Nomor Transaksi Untuk Kode
+            Integer newNomor = dao.countTransaksiToday(request.getIdStore());
+
             // Get Nomax
             Integer newId = noMaxDao.findNoMax("tmtransaksi");
 
             // Create Kode
-            String newKode = String.format("TRX-%s%04d", formattedDate, newId);
+            String newKode = String.format("TRX-%s-%04d", formattedDate, newNomor);
             log.info("New Kode : {}, New Id : {}", newKode, newId);
 
             // Save Proses
@@ -47,6 +53,9 @@ public class TransaksiService {
                     rinci.setIdTransaksi(newId);
                     dao.tambahTransaksiRinci(rinci);
             }
+
+            // Save Server
+            serverService.TambahTransaksiServer(request);
 
             // Update TRNOMAX
             noMaxDao.updateTrNomax("tmtransaksi");
