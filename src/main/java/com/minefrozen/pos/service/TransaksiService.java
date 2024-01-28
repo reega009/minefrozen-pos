@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -32,6 +36,10 @@ public class TransaksiService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
         String formattedDate = currentDate.format(formatter);
 
+        Instant instantNow = Instant.now();
+        LocalDateTime timeStampNow = LocalDateTime.ofInstant(instantNow, ZoneId.systemDefault());
+
+
         try{
             // Get Nomor Transaksi Untuk Kode
             Integer newNomor = dao.countTransaksiToday(request.getIdStore());
@@ -46,6 +54,7 @@ public class TransaksiService {
             // Save Proses
             request.setId(newId);
             request.setKodeTransaksi(newKode);
+            request.setDPgunRekam(Timestamp.valueOf(timeStampNow));
             dao.tambahTransaksi(request);
 
             // Save Rinci
@@ -62,9 +71,8 @@ public class TransaksiService {
 
         }catch (Exception e){
             log.info("An error occurred: " + e.getMessage());
+            throw e;
         }
-
-
     }
 
 }

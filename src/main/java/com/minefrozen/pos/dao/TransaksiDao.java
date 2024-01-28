@@ -18,7 +18,7 @@ public class TransaksiDao {
     public void tambahTransaksi(TransaksiDto.TambahTransaksi tambahTransaksi){
         String query = "INSERT INTO tmtransaksi\n" +
                 "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, i_pgun_rekam, d_pgun_rekam)\n" +
-                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :iPgunRekam, CURRENT_TIMESTAMP)\n";
+                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :iPgunRekam, :dPgunRekam)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", tambahTransaksi.getId());
         map.addValue("idStore", tambahTransaksi.getIdStore());
@@ -26,6 +26,7 @@ public class TransaksiDao {
         map.addValue("jenisPembayaran", tambahTransaksi.getJenisPembayaran());
         map.addValue("nomorKasir", tambahTransaksi.getNomorKasir());
         map.addValue("iPgunRekam", 1);
+        map.addValue("dPgunRekam", tambahTransaksi.getDPgunRekam());
         jdbcTemplate.update(query, map);
     }
 
@@ -45,7 +46,8 @@ public class TransaksiDao {
     public Integer countTransaksiToday(Integer idStore){
         String query = "select count(i_id) + 1 from tmtransaksi t where id_store = :idStore and d_pgun_rekam::date = CURRENT_TIMESTAMP::date\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
-        return jdbcTemplate.queryForObject(query, map, new BeanPropertyRowMapper<>(Integer.class));
+        map.addValue("idStore", idStore);
+        return jdbcTemplate.queryForObject(query, map, Integer.class);
     }
 
 }

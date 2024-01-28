@@ -40,10 +40,7 @@ public class PosToServerService {
                 // Update Invent Server
                 dao.updateQtyInvenServer(rinci.getIdStore(), rinci.getIdProduk(), rinci.getExpiredDate(), rinci.getQty());
             }
-
-
         }catch (Exception e){
-            log.info("Error Saving Server, try Saving Backup : " + e.getMessage());
             try{
                 dao.tambahTransaksiBackup(request);
 
@@ -53,10 +50,12 @@ public class PosToServerService {
                 }
             }catch (Exception exc){
                 log.info("Error Saving Backup: " + e.getMessage());
+                throw e;
             }
         }
     }
 
+    @Transactional
     // Send Data Backup To Server
     public void sendDataBackupToServer(){
         try{
@@ -82,7 +81,13 @@ public class PosToServerService {
             dao.deleteDataBackupRinci();
         }catch (Exception e){
             log.info("Error Send Data Backup To Server", e.getMessage());
+            throw e;
+
         }
+    }
+
+    public Integer testServer(){
+        return dao.testServer();
     }
 
 }

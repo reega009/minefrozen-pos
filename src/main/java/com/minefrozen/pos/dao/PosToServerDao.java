@@ -27,14 +27,14 @@ public class PosToServerDao {
     public void tambahTransaksiBackup(TransaksiDto.TambahTransaksi tambahTransaksi){
         String query = "INSERT INTO tmtransaksibackup\n" +
                 "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, i_pgun_rekam, d_pgun_rekam)\n" +
-                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :iPgunRekam, :d_pgun_rekam)\n";
+                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :iPgunRekam, :dPgunRekam)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", tambahTransaksi.getId());
         map.addValue("idStore", tambahTransaksi.getIdStore());
         map.addValue("kodeTransaksi", tambahTransaksi.getKodeTransaksi());
         map.addValue("jenisPembayaran", tambahTransaksi.getJenisPembayaran());
         map.addValue("nomorKasir", tambahTransaksi.getNomorKasir());
-        map.addValue("iPgunRekam", tambahTransaksi.getIPgunRekam());
+        map.addValue("iPgunRekam", 1);
         map.addValue("dPgunRekam", tambahTransaksi.getDPgunRekam());
         jdbcTemplatePos.update(query, map);
     }
@@ -76,6 +76,7 @@ public class PosToServerDao {
                 "FROM tmtransaksirincibackup\n" +
                 "where id_transaksi = :idTransaksi\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("idTransaksi", idTransaksi);
         return jdbcTemplatePos.query(query, map, new BeanPropertyRowMapper<>(TransaksiDto.TambahTransaksiRinci.class));
     }
 
@@ -103,7 +104,7 @@ public class PosToServerDao {
         map.addValue("kodeTransaksi", tambahTransaksi.getKodeTransaksi());
         map.addValue("jenisPembayaran", tambahTransaksi.getJenisPembayaran());
         map.addValue("nomorKasir", tambahTransaksi.getNomorKasir());
-        map.addValue("iPgunRekam", tambahTransaksi.getIPgunRekam());
+        map.addValue("iPgunRekam", 1);
         map.addValue("dPgunRekam", tambahTransaksi.getDPgunRekam());
         jdbcTemplateServer.update(query, map);
     }
@@ -136,6 +137,12 @@ public class PosToServerDao {
         map.addValue("expiredDate", expiredDate);
         map.addValue("qtyBeli", qtyBeli);
         jdbcTemplateServer.update(query,map);
+    }
+
+    public Integer testServer(){
+        String query = "select count(*) from tminventory t  ";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        return jdbcTemplateServer.queryForObject(query, map, Integer.class);
     }
 
 }

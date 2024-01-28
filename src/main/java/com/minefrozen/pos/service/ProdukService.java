@@ -23,4 +23,26 @@ public class ProdukService {
         return dao.findProdukBySearchName(paramName);
     }
 
+
+    public List<ProdukDto.Produk> findAll(){
+        return dao.findAll();
+    }
+    public Optional<ProdukDto.Produk> findById(Integer id){
+        return dao.findById(id);
+    }
+
+    public void save(ProdukDto.Produk data){
+        dao.save(data);
+    }
+
+    public void update(ProdukDto.Produk data){
+        dao.update(data);
+    }
+
+    public void delete(Integer id){
+        dao.delete(id);
+    }
+
+
+
 }

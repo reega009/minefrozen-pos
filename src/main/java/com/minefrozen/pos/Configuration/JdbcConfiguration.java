@@ -41,10 +41,6 @@ public class JdbcConfiguration {
                 .build();
     }
 
-//    @Bean
-//    public JdbcTemplate posJdbcTemplate(@Qualifier("posDataSource") DataSource dataSource) {
-//        return new JdbcTemplate(dataSource);
-//    }
 
     @Bean(name = "posJdbc")
     public NamedParameterJdbcTemplate posJdbc(@Qualifier("posDataSource") DataSource dataSource) {
@@ -52,10 +48,6 @@ public class JdbcConfiguration {
     }
 
 
-//    @Bean
-//    public JdbcTemplate minefrozenJdbcTemplate(@Qualifier("minefrozenDataSource") DataSource dataSource) {
-//        return new JdbcTemplate(dataSource);
-//    }
 
     @Bean(name = "serverJdbc")
     public NamedParameterJdbcTemplate serverJdbc(@Qualifier("minefrozenDataSource") DataSource dataSource) {
