@@ -73,6 +73,8 @@ public class PosToServerService {
                 dao.tambahTransaksiServer(data);
                 for (TransaksiDto.TambahTransaksiRinci dataRinci : data.getTransaksiRinci()){
                     dao.tambahTransaksiRinciServer(dataRinci);
+                    // Update Invent Server
+                    dao.updateQtyInvenServer(dataRinci.getIdStore(), dataRinci.getIdProduk(), dataRinci.getExpiredDate(), dataRinci.getQty());
                 }
             }
 
