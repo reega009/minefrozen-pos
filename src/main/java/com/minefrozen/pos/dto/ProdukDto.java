@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class ProdukDto {
@@ -18,9 +19,10 @@ public class ProdukDto {
         private String kodeProduct;
         private String namaProduct;
         private BigDecimal hargaJual;
-        private BigDecimal diskon;
         private Integer berat;
         private String barcode;
+        private Integer qtyInven;
+        private Date expiredDate;
     }
 
     @Data

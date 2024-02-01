@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,17 +20,14 @@ public class ProdukController {
     private ProdukService service;
 
     @GetMapping("/findProdukByBarcode")
-    public ResponseEntity<?> findProdukByBarcode(@RequestParam String barcode){
-        Optional<ProdukDto.ProdukKasir> data = service.findProdukByBarcode(barcode);
-        if (!data.isPresent()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(data.get());
+    public ResponseEntity<?> findProdukByBarcode(@RequestParam BigInteger barcode, @RequestParam Integer idStore){
+        List<ProdukDto.ProdukKasir> data = service.findProdukByBarcode(barcode, idStore);
+        return ResponseEntity.ok(data);
     }
 
     @GetMapping("findProdukBySearchName")
-    public ResponseEntity<?> findProdukBySearchName(@RequestParam(required = false) String paramName){
-        List<ProdukDto.ProdukKasir> data = service.findProdukBySearchName(paramName);
+    public ResponseEntity<?> findProdukBySearchName(@RequestParam(required = false) String paramName, @RequestParam Integer idStore){
+        List<ProdukDto.ProdukKasir> data = service.findProdukBySearchName(paramName, idStore);
         return ResponseEntity.ok(data);
     }
 

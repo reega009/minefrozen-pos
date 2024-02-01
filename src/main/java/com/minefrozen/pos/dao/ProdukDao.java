@@ -20,13 +20,12 @@ public class ProdukDao {
     @Qualifier("posJdbc")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(String barcode){
+    public List<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode){
         String query = "select\n" +
                 "\tt.i_id as id,\n" +
                 "\tt.kode_product as kodeProduct,\n" +
                 "\tt.nama_product as namaProduct,\n" +
                 "\tt.harga_jual as hargaJual,\n" +
-                "\tcoalesce((select disc_product from trdiskonproduk where id_product = t.i_id and current_timestamp::date between tanggal_awal_disc::date and tanggal_akhir_disc::date),0) as disc,\n" +
                 "\tt.berat,\n" +
                 "\tt.barcode\n" +
                 "from\n" +
@@ -34,16 +33,7 @@ public class ProdukDao {
                 "where t.barcode = :barcode";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("barcode", barcode);
-        try {
-            ProdukDto.ProdukKasir data = jdbcTemplate.queryForObject(query, map, new BeanPropertyRowMapper<>(ProdukDto.ProdukKasir.class));
-            if(data != null){
-                return Optional.of(data);
-            }else{
-                return Optional.empty();
-            }
-        } catch(DataAccessException e){
-            return Optional.empty();
-        }
+        return jdbcTemplate.query(query.toString(), map, new BeanPropertyRowMapper<>(ProdukDto.ProdukKasir.class));
     }
 
     public List<ProdukDto.ProdukKasir> findProdukBySearchName(String paramName){
@@ -52,7 +42,6 @@ public class ProdukDao {
                 "\tt.kode_product as kodeProduct,\n" +
                 "\tt.nama_product as namaProduct,\n" +
                 "\tt.harga_jual as hargaJual,\n" +
-                "\tcoalesce((select disc_product from trdiskonproduk where id_product = t.i_id and current_timestamp::date between tanggal_awal_disc::date and tanggal_akhir_disc::date),0) as disc,\n" +
                 "\tt.berat,\n" +
                 "\tt.barcode\n" +
                 "from\n" +

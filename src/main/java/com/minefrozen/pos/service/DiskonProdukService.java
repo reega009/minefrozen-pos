@@ -15,16 +15,16 @@ public class DiskonProdukService {
     private DiskonProdukDao dao;
 
     public List<DiskonProdukDto.DiskonProduk> findAll(Integer idStore){
-        return findAll(idStore);
+        return dao.findAll(idStore);
     }
 
 
     public Optional<DiskonProdukDto.DiskonProduk> findById(Integer id, Integer idStore){
-        return findById(id, idStore);
+        return dao.findById(id, idStore);
     }
 
     public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(DiskonProdukDto.ParamCheckDiskon param){
-        return findCheckDisc(param);
+        return dao.findCheckDisc(param);
     }
 
     public void save(DiskonProdukDto.DiskonProduk data){
