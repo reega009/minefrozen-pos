@@ -25,6 +25,7 @@ public class TransaksiDto {
         private BigDecimal totalHargaPerTransaksi;
         private Integer idMember;
         private Integer discMember;
+        private Date tanggalTenggatPiutang;
         private List<TambahTransaksiRinci> transaksiRinci;
 
     }

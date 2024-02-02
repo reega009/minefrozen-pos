@@ -26,8 +26,8 @@ public class PosToServerDao {
     // ---------------- BACKUP -----------------
     public void tambahTransaksiBackup(TransaksiDto.TambahTransaksi tambahTransaksi){
         String query = "INSERT INTO tmtransaksibackup\n" +
-                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, total_harga , id_member , disc_member , i_pgun_rekam, d_pgun_rekam)\n" +
-                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :totalHarga, :idMember, :discMember , :iPgunRekam, :dPgunRekam)";
+                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, total_harga , id_member , disc_member, tanggal_tenggat_piutang , i_pgun_rekam, d_pgun_rekam)\n" +
+                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :totalHarga, :idMember, :discMember, :tanggalTenggatPiutang , :iPgunRekam, :dPgunRekam)";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", tambahTransaksi.getId());
         map.addValue("idStore", tambahTransaksi.getIdStore());
@@ -37,6 +37,7 @@ public class PosToServerDao {
         map.addValue("totalHarga", tambahTransaksi.getTotalHargaPerTransaksi());
         map.addValue("idMember", tambahTransaksi.getIdMember());
         map.addValue("discMember", tambahTransaksi.getDiscMember());
+        map.addValue("tanggalTenggatPiutang", tambahTransaksi.getTanggalTenggatPiutang());
         map.addValue("iPgunRekam", 1);
         map.addValue("dPgunRekam", tambahTransaksi.getDPgunRekam());
         jdbcTemplatePos.update(query, map);
@@ -67,7 +68,8 @@ public class PosToServerDao {
                 "i_pgun_ubah as iPgunUbah,\n" +
                 "d_pgun_ubah as dPgunUbah,\n" +
                 "jenis_pembayaran as jenisPembayaran,\n" +
-                "nomor_kasir as nomorKasir\n" +
+                "nomor_kasir as nomorKasir,\n" +
+                "tanggal_tenggat_piutang as tanggalTenggatPiutang\n" +
                 "FROM tmtransaksibackup\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         return jdbcTemplatePos.query(query, map, new BeanPropertyRowMapper<>(TransaksiDto.TambahTransaksi.class));
@@ -102,8 +104,8 @@ public class PosToServerDao {
 
     public void tambahTransaksiServer(TransaksiDto.TambahTransaksi tambahTransaksi){
         String query = "INSERT INTO tmtransaksi\n" +
-                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, total_harga , id_member , disc_member , i_pgun_rekam, d_pgun_rekam)\n" +
-                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :totalHarga, :idMember, :discMember , :iPgunRekam, :dPgunRekam)";
+                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, total_harga , id_member , disc_member, tanggal_tenggat_piutang , i_pgun_rekam, d_pgun_rekam)\n" +
+                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :totalHarga, :idMember, :discMember, :tanggalTenggatPiutang , :iPgunRekam, :dPgunRekam)";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", tambahTransaksi.getId());
         map.addValue("idStore", tambahTransaksi.getIdStore());
@@ -113,6 +115,7 @@ public class PosToServerDao {
         map.addValue("totalHarga", tambahTransaksi.getTotalHargaPerTransaksi());
         map.addValue("idMember", tambahTransaksi.getIdMember());
         map.addValue("discMember", tambahTransaksi.getDiscMember());
+        map.addValue("tanggalTenggatPiutang", tambahTransaksi.getTanggalTenggatPiutang());
         map.addValue("iPgunRekam", 1);
         map.addValue("dPgunRekam", tambahTransaksi.getDPgunRekam());
         jdbcTemplateServer.update(query, map);
