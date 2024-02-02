@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +38,11 @@ public class DiskonProdukController {
     }
 
     @GetMapping("/findCheckDisc")
-    public ResponseEntity<?> findCheckDisc(@RequestParam DiskonProdukDto.ParamCheckDiskon param){
-        Optional<DiskonProdukDto.DiskonProduk> data = service.findCheckDisc(param);
+    public ResponseEntity<?> findCheckDisc(@RequestParam Integer idStore,
+                                           @RequestParam Integer idProduk,
+                                           @RequestParam Integer qtyBeli,
+                                           @RequestParam Date expiredDateProduk){
+        Optional<DiskonProdukDto.DiskonProduk> data = service.findCheckDisc(idStore, idProduk, qtyBeli, expiredDateProduk);
         if (!data.isPresent()) {
             return ResponseEntity.noContent().build();
         }

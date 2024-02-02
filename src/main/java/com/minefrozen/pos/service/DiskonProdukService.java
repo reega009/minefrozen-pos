@@ -4,7 +4,9 @@ import com.minefrozen.pos.dao.DiskonProdukDao;
 import com.minefrozen.pos.dto.DiskonProdukDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +25,11 @@ public class DiskonProdukService {
         return dao.findById(id, idStore);
     }
 
-    public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(DiskonProdukDto.ParamCheckDiskon param){
-        return dao.findCheckDisc(param);
+    public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(Integer idStore,
+                                                                Integer idProduk,
+                                                                Integer qtyBeli,
+                                                                Date expiredDateProduk){
+        return dao.findCheckDisc(idStore, idProduk, qtyBeli, expiredDateProduk);
     }
 
     public void save(DiskonProdukDto.DiskonProduk data){

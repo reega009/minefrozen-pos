@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,7 +80,10 @@ public class DiskonProdukDao {
         }
     }
 
-    public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(DiskonProdukDto.ParamCheckDiskon param){
+    public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(Integer idStore,
+                                                                Integer idProduk,
+                                                                Integer qtyBeli,
+                                                                Date expiredDateProduk){
         String query = "SELECT\n" +
                 "    id,\n" +
                 "    id_store AS idStore,\n" +
@@ -113,10 +117,10 @@ public class DiskonProdukDao {
                 "        END\n" +
                 "    )\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
-        map.addValue("idStore",param.getIdStore());
-        map.addValue("idProduk",param.getIdProduk());
-        map.addValue("qtyBeli",param.getQtyBeli());
-        map.addValue("expiredDateProduk",param.getExpiredDateProduk());
+        map.addValue("idStore",idStore);
+        map.addValue("idProduk",idProduk);
+        map.addValue("qtyBeli",qtyBeli);
+        map.addValue("expiredDateProduk",expiredDateProduk);
         try {
             DiskonProdukDto.DiskonProduk data = jdbcTemplate.queryForObject(query, map, new BeanPropertyRowMapper<>(DiskonProdukDto.DiskonProduk.class));
             if(data != null){
