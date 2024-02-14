@@ -26,14 +26,15 @@ public class PosToServerDao {
     // ---------------- BACKUP -----------------
     public void tambahTransaksiBackup(TransaksiDto.TambahTransaksi tambahTransaksi){
         String query = "INSERT INTO tmtransaksibackup\n" +
-                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, total_harga , id_member , disc_member, tanggal_tenggat_piutang , i_pgun_rekam, d_pgun_rekam)\n" +
-                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :totalHarga, :idMember, :discMember, :tanggalTenggatPiutang , :iPgunRekam, :dPgunRekam)";
+                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, shift, total_harga , id_member , disc_member, tanggal_tenggat_piutang , i_pgun_rekam, d_pgun_rekam)\n" +
+                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :shift, :totalHarga, :idMember, :discMember, :tanggalTenggatPiutang , :iPgunRekam, :dPgunRekam)";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", tambahTransaksi.getId());
         map.addValue("idStore", tambahTransaksi.getIdStore());
         map.addValue("kodeTransaksi", tambahTransaksi.getKodeTransaksi());
         map.addValue("jenisPembayaran", tambahTransaksi.getJenisPembayaran());
         map.addValue("nomorKasir", tambahTransaksi.getNomorKasir());
+        map.addValue("shift", tambahTransaksi.getShift());
         map.addValue("totalHarga", tambahTransaksi.getTotalHargaPerTransaksi());
         map.addValue("idMember", tambahTransaksi.getIdMember());
         map.addValue("discMember", tambahTransaksi.getDiscMember());
@@ -69,6 +70,7 @@ public class PosToServerDao {
                 "d_pgun_ubah as dPgunUbah,\n" +
                 "jenis_pembayaran as jenisPembayaran,\n" +
                 "nomor_kasir as nomorKasir,\n" +
+                "shift as shift,\n" +
                 "tanggal_tenggat_piutang as tanggalTenggatPiutang\n" +
                 "FROM tmtransaksibackup\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
@@ -104,14 +106,15 @@ public class PosToServerDao {
 
     public void tambahTransaksiServer(TransaksiDto.TambahTransaksi tambahTransaksi){
         String query = "INSERT INTO tmtransaksi\n" +
-                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, total_harga , id_member , disc_member, tanggal_tenggat_piutang , i_pgun_rekam, d_pgun_rekam)\n" +
-                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :totalHarga, :idMember, :discMember, :tanggalTenggatPiutang , :iPgunRekam, :dPgunRekam)";
+                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, shift, total_harga , id_member , disc_member, tanggal_tenggat_piutang , i_pgun_rekam, d_pgun_rekam)\n" +
+                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :shift, :totalHarga, :idMember, :discMember, :tanggalTenggatPiutang , :iPgunRekam, :dPgunRekam)";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", tambahTransaksi.getId());
         map.addValue("idStore", tambahTransaksi.getIdStore());
         map.addValue("kodeTransaksi", tambahTransaksi.getKodeTransaksi());
         map.addValue("jenisPembayaran", tambahTransaksi.getJenisPembayaran());
         map.addValue("nomorKasir", tambahTransaksi.getNomorKasir());
+        map.addValue("shift", tambahTransaksi.getShift());
         map.addValue("totalHarga", tambahTransaksi.getTotalHargaPerTransaksi());
         map.addValue("idMember", tambahTransaksi.getIdMember());
         map.addValue("discMember", tambahTransaksi.getDiscMember());
@@ -152,6 +155,19 @@ public class PosToServerDao {
         map.addValue("expiredDate", expiredDate);
         map.addValue("qtyBeli", qtyBeli);
         jdbcTemplateServer.update(query,map);
+    }
+
+    public void tambahPiutang(ServerDto.TambahPiutang data){
+        String query = "INSERT INTO tmpiutang\n" +
+                "(i_id, id_transaksi, total_pelunasan, id_store)\n" +
+                "VALUES(:id, :idTransaksi, :totalPelunasan, :idStore)";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("id", data.getId());
+        map.addValue("idTransaksi", data.getIdTransaksi());
+        map.addValue("totalPelunasan", data.getTotalPelunasan());
+        map.addValue("idStore", data.getIdStore());
+        jdbcTemplateServer.update(query,map);
+
     }
 
     public Integer testServer(){

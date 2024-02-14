@@ -33,6 +33,20 @@ public class PosToServerService {
         try{
             dao.tambahTransaksiServer(request);
 
+            // Save Piutang if jenisPembayaran 4
+            if(request.getJenisPembayaran() == 4){
+                Integer newId = noMaxDao.findNoMax("tmpiutang");
+
+                ServerDto.TambahPiutang dataPiutang = new ServerDto.TambahPiutang();
+                dataPiutang.setId(newId);
+                dataPiutang.setIdTransaksi(request.getId());
+                dataPiutang.setIdStore(request.getIdStore());
+                dataPiutang.setTotalPelunasan(request.getTotalHargaPerTransaksi());
+                dao.tambahPiutang(dataPiutang);
+
+                noMaxDao.updateTrNomax("tmpiutang");
+            }
+
             // Save Rinci
             for (TransaksiDto.TambahTransaksiRinci rinci : request.getTransaksiRinci()){
                 dao.tambahTransaksiRinciServer(rinci);
@@ -71,6 +85,21 @@ public class PosToServerService {
 
                 // Send to Server
                 dao.tambahTransaksiServer(data);
+
+                // Save Piutang if jenisPembayaran 4
+                if(data.getJenisPembayaran() == 4){
+                    Integer newId = noMaxDao.findNoMax("tmpiutang");
+
+                    ServerDto.TambahPiutang dataPiutang = new ServerDto.TambahPiutang();
+                    dataPiutang.setId(newId);
+                    dataPiutang.setIdTransaksi(data.getId());
+                    dataPiutang.setIdStore(data.getIdStore());
+                    dataPiutang.setTotalPelunasan(data.getTotalHargaPerTransaksi());
+                    dao.tambahPiutang(dataPiutang);
+
+                    noMaxDao.updateTrNomax("tmpiutang");
+                }
+
                 for (TransaksiDto.TambahTransaksiRinci dataRinci : data.getTransaksiRinci()){
                     dao.tambahTransaksiRinciServer(dataRinci);
                     // Update Invent Server

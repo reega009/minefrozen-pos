@@ -19,6 +19,7 @@ public class TransaksiDto {
         private Integer idStore;
         private Integer jenisPembayaran;
         private Integer nomorKasir;
+        private Integer shift;
         private String kodeTransaksi;
         private Integer iPgunRekam;
         private Timestamp dPgunRekam;
@@ -27,7 +28,6 @@ public class TransaksiDto {
         private Integer discMember;
         private Date tanggalTenggatPiutang;
         private List<TambahTransaksiRinci> transaksiRinci;
-
     }
 
     @Data
