@@ -3,6 +3,7 @@ package com.minefrozen.pos.dao;
 import com.minefrozen.pos.dto.RekapTransaksiDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,6 +18,7 @@ public class RekapTransaksiDao {
 
 
     @Autowired
+    @Qualifier("posJdbc")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<RekapTransaksiDto.Transaksi> findAll(Integer idStore, Integer nomorKasir, Integer shift, Date tanggal){

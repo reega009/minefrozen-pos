@@ -8,10 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/pos/transaksi")
@@ -31,6 +30,18 @@ public class TransaksiController {
             throwables.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CostumMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi Kesalahan Server"));
         }
+    }
+
+    @GetMapping("/findAll")
+    public ResponseEntity<?> findAll(@RequestParam Integer idStore ,@RequestParam Integer nomorKasir,@RequestParam Integer shift){
+        List<TransaksiDto.Transaksi> data = service.findAll(idStore, nomorKasir, nomorKasir);
+        return ResponseEntity.ok(data);
+    }
+
+    @GetMapping("/findAllRinci/{idStore}/{idTransaksi}")
+    public ResponseEntity<?> findAll(@PathVariable Integer idStore, @PathVariable Integer idTransaksi){
+        List<TransaksiDto.TransaksiRinci> data = service.findAllRinci(idStore,idTransaksi);
+        return ResponseEntity.ok(data);
     }
 
 }

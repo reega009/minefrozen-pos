@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class TransaksiDao {
 
@@ -57,5 +59,101 @@ public class TransaksiDao {
         map.addValue("idStore", idStore);
         return jdbcTemplate.queryForObject(query, map, Integer.class);
     }
+
+    public List<TransaksiDto.Transaksi> findAll(Integer idStore, Integer nomorKasir, Integer shift){
+        String query = "select\n" +
+                "\tnoUrut,\n" +
+                "\tid,\n" +
+                "\tkodeTransaksi,\n" +
+                "\ttanggalTransaksi,\n" +
+                "\tnamaPembayaran,\n" +
+                "\tnomorKasir,\n" +
+                "\tshift,\n" +
+                "\tnamaUser,\n" +
+                "\tdiscMember,\n" +
+                "\ttotalHargaPerTransaksi\n" +
+                "from(\n" +
+                "\tselect\n" +
+                "\t\t1 as noUrut,\n" +
+                "\t\ttrx.i_id as id,\n" +
+                "\t\tcase\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 1 then 'Cash'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 2 then 'Debit'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 3 then 'Credit'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 4 then 'Piutang'\n" +
+                "\t\tend as namaPembayaran,\n" +
+                "\t\ttrx.nomor_kasir as nomorKasir,\n" +
+                "\t\ttrx.shift as shift,\n" +
+                "\t\ttrx.kode_transaksi as kodeTransaksi,\n" +
+                "\t\ttrx.total_harga as totalHargaPerTransaksi,\n" +
+                "\t\ttrx.disc_member as discMember,\n" +
+                "\t\ttuser.username as namaUser,\n" +
+                "\t\tTO_CHAR(trx.d_pgun_rekam, 'DD-MM-YYYY HH24:MI:SS') as tanggalTransaksi\n" +
+                "\tFROM \n" +
+                "\t    tmtransaksi trx \n" +
+                "\t    left join truser tuser on tuser.id = trx.i_pgun_rekam\n" +
+                "\twhere trx.id_store = :idStore\n" +
+                "\tand nomor_kasir = :nomorKasir\n" +
+                "\tand shift = :shift\n" +
+                "union all\n" +
+                "\tselect distinct\n" +
+                "\t\t2 as noUrut,\n" +
+                "\t\t0 as id,\n" +
+                "\t\t'' as namaPembayaran,\n" +
+                "\t\t0 as nomorKasir,\n" +
+                "\t\t0 as shift,\n" +
+                "\t\t'TOTAL' as kodeTransaksi,\n" +
+                "\t\tsum(trx.total_harga) - (sum(trx.total_harga) * sum(disc_member) / 100) as totalHargaPerTransaksi,\n" +
+                "\t\t0 as discMember,\n" +
+                "\t\t'' as namaUser,\n" +
+                "\t\t'' as tanggalTransaksi\n" +
+                "\tFROM \n" +
+                "\t    tmtransaksi trx \n" +
+                "\t    left join truser tuser on tuser.id = trx.i_pgun_rekam\n" +
+                "\twhere trx.id_store = :idStore\n" +
+                "\tand nomor_kasir = :nomorKasir\n" +
+                "\tand shift = :shift\n" +
+                "\t) as rekapTransaksi order by nourut asc, kodeTransaksi asc";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("idStore", idStore);
+        map.addValue("nomorKasir", nomorKasir);
+        map.addValue("shift", shift);
+        return jdbcTemplate.query(query, map, new BeanPropertyRowMapper<>(TransaksiDto.Transaksi.class));
+    }
+
+    public List<TransaksiDto.TransaksiRinci> findAllRinci(Integer idStore, Integer idTransaksi){
+        String query = "SELECT\n" +
+                "\tcase\n" +
+                "\t\twhen trx.jenis_pembayaran = 1 then 'Cash'\n" +
+                "\t\twhen trx.jenis_pembayaran = 2 then 'Debit'\n" +
+                "\t\twhen trx.jenis_pembayaran = 3 then 'Credit'\n" +
+                "\t\twhen trx.jenis_pembayaran = 4 then 'Piutang'\n" +
+                "\tend as jenisPembayaran,\n" +
+                "\ttprd.kode_product as kodeProduk,\n" +
+                "\ttprd.nama_product as namaProduk,\n" +
+                "\ttrxrinci.harga_jual as hargaJual,\n" +
+                "\ttrxrinci.disc_produk as discProduk,\n" +
+                "\ttrxrinci.qty,\n" +
+                "\ttrxrinci.total_per_produk as totalHargaPerProduk,\n" +
+                "\ttrx.kode_transaksi as kodeTransaksi,\n" +
+                "\tTO_CHAR(trx.d_pgun_rekam, 'DD-MM-YYYY HH24:MI:SS') as tanggalTransaksi,\n" +
+                "\ttrx.nomor_kasir as nomorKasir,\n" +
+                "\ttuser.username as namaKasir,\n" +
+                "\ttrx.disc_member as discMember,\n" +
+                "\ttrx.total_harga as totalHarga\n" +
+                "FROM \n" +
+                "    tmtransaksi trx \n" +
+                "    left join tmtransaksirinci trxrinci on trx.i_id = trxrinci.id_transaksi \n" +
+                "    left join trproduct tprd on tprd.i_id = trxrinci.id_produk\n" +
+                "    left join truser tuser on tuser.id = trx.i_pgun_rekam\n" +
+                "where trx.id_store = :idStore\n" +
+                "and trx.i_id = :idTransaksi";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("idStore", idStore);
+        map.addValue("idTransaksi", idTransaksi);
+        return jdbcTemplate.query(query, map, new BeanPropertyRowMapper<>(TransaksiDto.TransaksiRinci.class));
+    }
+
+
 
 }

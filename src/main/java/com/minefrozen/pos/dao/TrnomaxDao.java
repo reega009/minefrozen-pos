@@ -13,6 +13,10 @@ public class TrnomaxDao {
     @Qualifier("posJdbc")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    @Autowired
+    @Qualifier("serverJdbc")
+    private NamedParameterJdbcTemplate jdbcTemplateServer;
+
     public Integer findNoMax(String namaTabel){
         String query = "select id_terbaru from trnomax where nama_tabel = :namaTabel";
         MapSqlParameterSource map = new MapSqlParameterSource();
@@ -25,6 +29,20 @@ public class TrnomaxDao {
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("namaTabel",namaTabel);
         jdbcTemplate.update(query, map);
+    }
+
+    public Integer findNoMaxServer(String namaTabel){
+        String query = "select id_terbaru from trnomax where nama_tabel = :namaTabel";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("namaTabel",namaTabel);
+        return jdbcTemplateServer.queryForObject(query, map, Integer.class);
+    }
+
+    public void updateTrNomaxServer(String namaTabel){
+        String query = "update trnomax set id_terbaru = id_terbaru + 1 where nama_tabel = :namaTabel";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("namaTabel",namaTabel);
+        jdbcTemplateServer.update(query, map);
     }
 
 }

@@ -44,4 +44,45 @@ public class TransaksiDto {
         private BigDecimal totalHargaPerProduk;
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Transaksi{
+        private Integer id;
+        private Integer idStore;
+        private Integer jenisPembayaran;
+        private String namaPembayaran;
+        private Integer nomorKasir;
+        private Integer shift;
+        private String kodeTransaksi;
+        private BigDecimal totalHargaPerTransaksi;
+        private Integer idMember;
+        private Integer discMember;
+        private Date tanggalTenggatPiutang;
+        private Integer iPgunRekam;
+        private String namaUser;
+        private String tanggalTransaksi;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TransaksiRinci{
+        private String jenisPembayaran;
+        private String kodeProduk;
+        private String namaProduk;
+        private BigDecimal hargaJual;
+        private BigDecimal discProduk;
+        private Integer qty;
+        private BigDecimal totalHargaPerProduk;
+        //
+        private String kodeTransaksi;
+        private String tanggalTransaksi;
+        private String nomorKasir;
+        private String namaKasir;
+        private BigDecimal discMember;
+        private BigDecimal totalHarga;
+
+    }
+
 }

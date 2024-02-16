@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -73,6 +74,14 @@ public class TransaksiService {
             log.info("An error occurred: " + e.getMessage());
             throw e;
         }
+    }
+
+    public List<TransaksiDto.Transaksi> findAll(Integer idStore, Integer nomorKasir, Integer shift){
+        return dao.findAll(idStore, nomorKasir, shift);
+    }
+
+    public List<TransaksiDto.TransaksiRinci> findAllRinci(Integer idStore, Integer idTransaksi){
+        return dao.findAllRinci(idStore, idTransaksi);
     }
 
 }
