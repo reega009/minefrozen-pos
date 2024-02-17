@@ -55,6 +55,7 @@ public class TransaksiService {
             // Save Proses
             request.setId(newId);
             request.setKodeTransaksi(newKode);
+            request.setShift(1); // SEMENTARA HARDCODE
             request.setDPgunRekam(Timestamp.valueOf(timeStampNow));
             dao.tambahTransaksi(request);
 
