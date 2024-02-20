@@ -27,6 +27,8 @@ public class TransaksiDto {
         private Integer idMember;
         private Integer discMember;
         private Date tanggalTenggatPiutang;
+        private Integer nomorKartuCredit;
+        private Integer jenisDebit;
         private List<TambahTransaksiRinci> transaksiRinci;
     }
 
@@ -82,6 +84,7 @@ public class TransaksiDto {
         private String namaKasir;
         private BigDecimal discMember;
         private BigDecimal totalHarga;
+        private Integer nomorKartuCredit;
 
     }
 

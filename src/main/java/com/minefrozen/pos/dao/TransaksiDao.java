@@ -19,8 +19,8 @@ public class TransaksiDao {
 
     public void tambahTransaksi(TransaksiDto.TambahTransaksi tambahTransaksi){
         String query = "INSERT INTO tmtransaksi\n" +
-                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, shift, total_harga , id_member , disc_member , tanggal_tenggat_piutang, i_pgun_rekam, d_pgun_rekam)\n" +
-                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :shift, :totalHarga, :idMember, :discMember, :tanggalTenggatPiutang , :iPgunRekam, :dPgunRekam)\n";
+                "(i_id, id_store, kode_transaksi, jenis_pembayaran, nomor_kasir, shift, total_harga , id_member , disc_member , tanggal_tenggat_piutang, nomor_kartu_credit, jenis_debit, i_pgun_rekam, d_pgun_rekam)\n" +
+                "VALUES(:id, :idStore, :kodeTransaksi, :jenisPembayaran, :nomorKasir, :shift, :totalHarga, :idMember, :discMember, :tanggalTenggatPiutang, :nomorKartuCredit, :jenisDebit , :iPgunRekam, :dPgunRekam)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", tambahTransaksi.getId());
         map.addValue("idStore", tambahTransaksi.getIdStore());
@@ -32,6 +32,8 @@ public class TransaksiDao {
         map.addValue("idMember", tambahTransaksi.getIdMember());
         map.addValue("discMember", tambahTransaksi.getDiscMember());
         map.addValue("tanggalTenggatPiutang", tambahTransaksi.getTanggalTenggatPiutang());
+        map.addValue("nomorKartuCredit", tambahTransaksi.getNomorKartuCredit());
+        map.addValue("jenisDebit", tambahTransaksi.getJenisDebit());
         map.addValue("iPgunRekam", 1);
         map.addValue("dPgunRekam", tambahTransaksi.getDPgunRekam());
         jdbcTemplate.update(query, map);
@@ -78,7 +80,12 @@ public class TransaksiDao {
                 "\t\ttrx.i_id as id,\n" +
                 "\t\tcase\n" +
                 "\t\t\twhen trx.jenis_pembayaran = 1 then 'Cash'\n" +
-                "\t\t\twhen trx.jenis_pembayaran = 2 then 'Debit'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 2 then \n" +
+                "\t\t\t\tcase \n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 1 then 'Debit BCA'\n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 2 then 'Debit Mandiri'\n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 3 then 'QRIS'\n" +
+                "\t\t\t\tend\n" +
                 "\t\t\twhen trx.jenis_pembayaran = 3 then 'Credit'\n" +
                 "\t\t\twhen trx.jenis_pembayaran = 4 then 'Piutang'\n" +
                 "\t\tend as namaPembayaran,\n" +
@@ -124,10 +131,15 @@ public class TransaksiDao {
     public List<TransaksiDto.TransaksiRinci> findAllRinci(Integer idStore, Integer idTransaksi){
         String query = "SELECT\n" +
                 "\tcase\n" +
-                "\t\twhen trx.jenis_pembayaran = 1 then 'Cash'\n" +
-                "\t\twhen trx.jenis_pembayaran = 2 then 'Debit'\n" +
-                "\t\twhen trx.jenis_pembayaran = 3 then 'Credit'\n" +
-                "\t\twhen trx.jenis_pembayaran = 4 then 'Piutang'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 1 then 'Cash'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 2 then \n" +
+                "\t\t\t\tcase \n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 1 then 'Debit BCA'\n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 2 then 'Debit Mandiri'\n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 3 then 'QRIS'\n" +
+                "\t\t\t\tend\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 3 then 'Credit'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 4 then 'Piutang'\n" +
                 "\tend as jenisPembayaran,\n" +
                 "\ttprd.kode_product as kodeProduk,\n" +
                 "\ttprd.nama_product as namaProduk,\n" +
@@ -140,7 +152,8 @@ public class TransaksiDao {
                 "\ttrx.nomor_kasir as nomorKasir,\n" +
                 "\ttuser.username as namaKasir,\n" +
                 "\ttrx.disc_member as discMember,\n" +
-                "\ttrx.total_harga as totalHarga\n" +
+                "\ttrx.total_harga as totalHarga,\n" +
+                "\ttrx.nomor_kartu_credit as nomorKartuCredit\n" +
                 "FROM \n" +
                 "    tmtransaksi trx \n" +
                 "    left join tmtransaksirinci trxrinci on trx.i_id = trxrinci.id_transaksi \n" +
