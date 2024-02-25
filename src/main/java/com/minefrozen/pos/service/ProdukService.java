@@ -23,21 +23,13 @@ public class ProdukService {
     private ServerDao serverDao;
 
     @Transactional
-    public List<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode, Integer idStore){
-        try{
-            return serverDao.findProdukByBarcodeServer(barcode, idStore);
-        }catch (Exception e){
+    public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode){
             return dao.findProdukByBarcode(barcode);
-        }
     }
 
     @Transactional
-    public List<ProdukDto.ProdukKasir> findProdukBySearchName(String paramName, Integer idStore){
-        try{
-            return serverDao.findProdukBySearchNameServer(paramName,idStore);
-        }catch (Exception e){
+    public List<ProdukDto.ProdukKasir> findProdukBySearchName(String paramName){
             return dao.findProdukBySearchName(paramName);
-        }
     }
 
 

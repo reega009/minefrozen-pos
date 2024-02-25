@@ -51,8 +51,28 @@ public class PosToServerService {
             for (TransaksiDto.TambahTransaksiRinci rinci : request.getTransaksiRinci()){
                 dao.tambahTransaksiRinciServer(rinci);
 
-                // Update Invent Server
-                dao.updateQtyInvenServer(rinci.getIdStore(), rinci.getIdProduk(), rinci.getExpiredDate(), rinci.getQty());
+                // Update Invent Server Or Delete Invent Server
+                Integer remainingQuantity = rinci.getQty(); // 20
+
+                List<TransaksiDto.ListSubstractInventory> listSubstractInventories = dao.listSubstractInventory(rinci.getIdProduk(), rinci.getIdStore()); // 30
+                for (TransaksiDto.ListSubstractInventory listSubstract : listSubstractInventories){
+                    log.info("Remaining Quantity: %d", remainingQuantity);
+                    if(remainingQuantity <= 0){
+                        break;
+                    }
+
+                    Integer subtractedQuantity = remainingQuantity - listSubstract.getQty() ; // 20 - 30 = -10
+                    if(subtractedQuantity >= 0){
+                        dao.deleteInvenServer(listSubstract.getIdInventory(), rinci.getIdStore(), listSubstract.getExpiredDate());
+                        remainingQuantity = subtractedQuantity;
+                        log.info("Delete ITEM {}", listSubstract);
+                    }else{
+                        dao.updateQtyInvenServer(rinci.getIdStore(), rinci.getIdProduk(), listSubstract.getExpiredDate(), subtractedQuantity);
+                        remainingQuantity = subtractedQuantity;
+                        log.info("UPDATE ITEM {}", listSubstract);
+                    }
+                }
+
             }
         }catch (Exception e){
             try{
@@ -100,10 +120,32 @@ public class PosToServerService {
                     noMaxDao.updateTrNomax("tmpiutang");
                 }
 
-                for (TransaksiDto.TambahTransaksiRinci dataRinci : data.getTransaksiRinci()){
-                    dao.tambahTransaksiRinciServer(dataRinci);
-                    // Update Invent Server
-                    dao.updateQtyInvenServer(dataRinci.getIdStore(), dataRinci.getIdProduk(), dataRinci.getExpiredDate(), dataRinci.getQty());
+                // Save Rinci
+                for (TransaksiDto.TambahTransaksiRinci rinci : data.getTransaksiRinci()){
+                    dao.tambahTransaksiRinciServer(rinci);
+
+                    // Update Invent Server Or Delete Invent Server
+                    Integer remainingQuantity = rinci.getQty(); // 20
+
+                    List<TransaksiDto.ListSubstractInventory> listSubstractInventories = dao.listSubstractInventory(rinci.getIdProduk(), rinci.getIdStore()); // 30
+                    for (TransaksiDto.ListSubstractInventory listSubstract : listSubstractInventories){
+                        log.info("Remaining Quantity: %d", remainingQuantity);
+                        if(remainingQuantity <= 0){
+                            break;
+                        }
+
+                        Integer subtractedQuantity = remainingQuantity - listSubstract.getQty() ; // 20 - 30 = -10
+                        if(subtractedQuantity >= 0){
+                            dao.deleteInvenServer(listSubstract.getIdInventory(), rinci.getIdStore(), listSubstract.getExpiredDate());
+                            remainingQuantity = subtractedQuantity;
+                            log.info("Delete ITEM {}", listSubstract);
+                        }else{
+                            dao.updateQtyInvenServer(rinci.getIdStore(), rinci.getIdProduk(), listSubstract.getExpiredDate(), subtractedQuantity);
+                            remainingQuantity = subtractedQuantity;
+                            log.info("UPDATE ITEM {}", listSubstract);
+                        }
+                    }
+
                 }
             }
 

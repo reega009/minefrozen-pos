@@ -27,7 +27,6 @@ public class DiskonProdukDao {
                 "\tid_store as idStore,\n" +
                 "\tjenis_diskon as jenisDiskon,\n" +
                 "\tid_produk as idProduk,\n" +
-                "\texpired_date_produk as expiredDateProduk,\n" +
                 "\tdisc,\n" +
                 "\ti_pgun_rekam as iPgunRekam,\n" +
                 "\td_pgun_rekam as dPgunRekam,\n" +
@@ -51,7 +50,6 @@ public class DiskonProdukDao {
                 "\tid_store as idStore,\n" +
                 "\tjenis_diskon as jenisDiskon,\n" +
                 "\tid_produk as idProduk,\n" +
-                "\texpired_date_produk as expiredDateProduk,\n" +
                 "\tdisc,\n" +
                 "\ti_pgun_rekam as iPgunRekam,\n" +
                 "\td_pgun_rekam as dPgunRekam,\n" +
@@ -82,15 +80,17 @@ public class DiskonProdukDao {
 
     public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(Integer idStore,
                                                                 Integer idProduk,
-                                                                Integer qtyBeli,
-                                                                Date expiredDateProduk){
+                                                                Integer qtyBeli){
         String query = "SELECT\n" +
                 "    id,\n" +
                 "    id_store AS idStore,\n" +
                 "    jenis_diskon AS jenisDiskon,\n" +
                 "    id_produk AS idProduk,\n" +
-                "    expired_date_produk AS expiredDateProduk,\n" +
-                "    COALESCE(disc, 0) as discProduk,\n" +
+                "    case \n" +
+                "    \twhen jenis_diskon = 'BONUS_PRODUCT' then 100\n" +
+                "    \telse disc\n" +
+                "    end\n" +
+                "    as discProduk,\n" +
                 "    i_pgun_rekam AS iPgunRekam,\n" +
                 "    d_pgun_rekam AS dPgunRekam,\n" +
                 "    i_pgun_ubah AS iPgunUbah,\n" +
@@ -103,24 +103,14 @@ public class DiskonProdukDao {
                 "    tmdiskonproduk\n" +
                 "WHERE\n" +
                 "    id_store = :idStore\n" +
-                "    AND id_produk = :id_produk \n" +
-                "    AND expired_date_produk = :expiredDateProduk\n" +
+                "    AND id_produk = :idProduk\n" +
                 "    AND current_timestamp::date BETWEEN tanggal_awal_periode::date AND tanggal_akhir_periode::date\n" +
-                "    AND (\n" +
-                "        CASE\n" +
-                "            WHEN jenis_diskon = 'BONUS_PRODUCT' THEN\n" +
-                "                CASE\n" +
-                "                    WHEN :qtyBeli >= syarat_qty_bonus THEN true\n" +
-                "                    ELSE false\n" +
-                "                END\n" +
-                "            ELSE true\n" +
-                "        END\n" +
-                "    )\n";
+                "    and :qtyBeli >= syarat_qty_bonus\n" +
+                "    order by d_pgun_rekam desc limit 1\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idStore",idStore);
         map.addValue("idProduk",idProduk);
         map.addValue("qtyBeli",qtyBeli);
-        map.addValue("expiredDateProduk",expiredDateProduk);
         try {
             DiskonProdukDto.DiskonProduk data = jdbcTemplate.queryForObject(query, map, new BeanPropertyRowMapper<>(DiskonProdukDto.DiskonProduk.class));
             if(data != null){
@@ -141,7 +131,6 @@ public class DiskonProdukDao {
                 "\tid_store,\n" +
                 "\tjenis_diskon,\n" +
                 "\tid_produk,\n" +
-                "\texpired_date_produk,\n" +
                 "\tdisc,\n" +
                 "\ti_pgun_rekam,\n" +
                 "\td_pgun_rekam,\n" +
@@ -153,7 +142,6 @@ public class DiskonProdukDao {
                 ":idStore,\n" +
                 ":jenisDiskon,\n" +
                 ":idProduk,\n" +
-                ":expiredDateProduk,\n" +
                 ":disc,\n" +
                 ":iPgunRekam,\n" +
                 "CURRENT_TIMESTAMP,\n" +
@@ -166,7 +154,6 @@ public class DiskonProdukDao {
         map.addValue("idStore", data.getIdStore());
         map.addValue("jenisDiskon", data.getJenisDiskon());
         map.addValue("idProduk", data.getIdProduk());
-        map.addValue("expiredDateProduk", data.getExpiredDateProduk());
         map.addValue("disc", data.getDiscProduk());
         map.addValue("iPgunRekam", 1);
         map.addValue("tanggalAwalPeriode", data.getTanggalAwalPeriode());
@@ -182,7 +169,6 @@ public class DiskonProdukDao {
                 "set\n" +
                 "\tjenis_diskon = :jenisDiskon,\n" +
                 "\tid_produk = :idProduk,\n" +
-                "\texpired_date_produk = :expiredDateProduk,\n" +
                 "\tdisc = :disc,\n" +
                 "\ti_pgun_ubah = :iPgunUbah,\n" +
                 "\td_pgun_ubah = CURRENT_TIMESTAMP,\n" +
@@ -197,7 +183,6 @@ public class DiskonProdukDao {
         map.addValue("idStore", data.getIdStore());
         map.addValue("jenisDiskon", data.getJenisDiskon());
         map.addValue("idProduk", data.getIdProduk());
-        map.addValue("expiredDateProduk", data.getExpiredDateProduk());
         map.addValue("disc", data.getDiscProduk());
         map.addValue("iPgunUbah", 1);
         map.addValue("tanggalAwalPeriode", data.getTanggalAwalPeriode());

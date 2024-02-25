@@ -17,7 +17,6 @@ public class DiskonProdukDto {
         private Integer id;
         private Integer idStore;
         private Integer idProduk;
-        private Date expiredDateProduk;
         private String jenisDiskon;
         private Date tanggalAwalPeriode;
         private Date tanggalAkhirPeriode;
@@ -40,7 +39,6 @@ public class DiskonProdukDto {
         private Integer idStore;
         private Integer idProduk;
         private Integer qtyBeli;
-        private Date expiredDateProduk;
     }
 
 }

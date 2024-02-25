@@ -48,13 +48,12 @@ public class PosToServerDao {
 
     public void tambahTransaksiRinciBackup(TransaksiDto.TambahTransaksiRinci rinci){
         String query = "INSERT INTO tmtransaksirincibackup\n" +
-                "(id_transaksi, id_produk, id_store, expired_date, qty, harga_jual, disc_produk, total_per_produk)\n" +
-                "VALUES(:idTransaksi, :idProduk, :idStore, :expiredDate, :qty, :hargaJual, :discProduk, :totalHargaPerProduk)";
+                "(id_transaksi, id_produk, id_store, qty, harga_jual, disc_produk, total_per_produk)\n" +
+                "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :discProduk, :totalHargaPerProduk)";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi", rinci.getIdTransaksi());
         map.addValue("idStore", rinci.getIdStore());
         map.addValue("idProduk", rinci.getIdProduk());
-        map.addValue("expiredDate", rinci.getExpiredDate());
         map.addValue("qty", rinci.getQty());
         map.addValue("hargaJual", rinci.getHargaJual());
         map.addValue("discProduk", rinci.getDiscProduk());
@@ -86,7 +85,6 @@ public class PosToServerDao {
         String query = "SELECT id_transaksi as idTransaksi,\n" +
                 "id_produk as idProduk,\n" +
                 "id_store as idStore,\n" +
-                "expired_date as expiredDate,\n" +
                 "qty,\n" +
                 "harga_jual as hargaJual,\n" +
                 "disc_produk as discProduk,\n" +
@@ -136,13 +134,12 @@ public class PosToServerDao {
 
     public void tambahTransaksiRinciServer(TransaksiDto.TambahTransaksiRinci rinci){
         String query = "INSERT INTO tmtransaksirinci\n" +
-                "(id_transaksi, id_produk, id_store, expired_date, qty, harga_jual, disc_produk, total_per_produk)\n" +
-                "VALUES(:idTransaksi, :idProduk, :idStore, :expiredDate, :qty, :hargaJual, :discProduk, :totalHargaPerProduk)";
+                "(id_transaksi, id_produk, id_store, qty, harga_jual, disc_produk, total_per_produk)\n" +
+                "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :discProduk, :totalHargaPerProduk)";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi", rinci.getIdTransaksi());
         map.addValue("idProduk", rinci.getIdProduk());
         map.addValue("idStore", rinci.getIdStore());
-        map.addValue("expiredDate", rinci.getExpiredDate());
         map.addValue("qty", rinci.getQty());
         map.addValue("hargaJual", rinci.getHargaJual());
         map.addValue("discProduk", rinci.getDiscProduk());
@@ -150,22 +147,6 @@ public class PosToServerDao {
         jdbcTemplateServer.update(query, map);
     }
 
-    public void updateQtyInvenServer(Integer idStore, Integer idProduk, Date expiredDate, Integer qtyBeli){
-        String query = "update \n" +
-                "\ttminventory \n" +
-                "set\n" +
-                "\tqty = qty - :qtyBeli\n" +
-                "where\n" +
-                "\tid_store = :idStore\n" +
-                "\tand id_produk = :idProduk\n" +
-                "\tand expired_date = :expiredDate";
-        MapSqlParameterSource map = new MapSqlParameterSource();
-        map.addValue("idStore", idStore);
-        map.addValue("idProduk", idProduk);
-        map.addValue("expiredDate", expiredDate);
-        map.addValue("qtyBeli", qtyBeli);
-        jdbcTemplateServer.update(query,map);
-    }
 
     public void tambahPiutang(ServerDto.TambahPiutang data){
         String query = "INSERT INTO tmpiutang\n" +
@@ -179,6 +160,59 @@ public class PosToServerDao {
         jdbcTemplateServer.update(query,map);
 
     }
+
+    // --------------- NEW SCHEMA FOR SUBSTRACT INVENTORY -----------------
+    public List<TransaksiDto.ListSubstractInventory> listSubstractInventory(Integer idProduk, Integer idStore){
+        String query = "select\n" +
+                "\ti_id as idInventory,\n" +
+                "\tqty,\n" +
+                "\tid_produk as idProduk,\n" +
+                "\texpired_date as expiredDate\n" +
+                "from\n" +
+                "\ttminventory t\n" +
+                "where\n" +
+                "\tid_produk = :idProduk\n" +
+                "\tand id_store = :idStore\n" +
+                "order by\n" +
+                "\texpired_date asc";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("idProduk", idProduk);
+        map.addValue("idStore", idStore);
+        return jdbcTemplateServer.query(query, map, new BeanPropertyRowMapper<>(TransaksiDto.ListSubstractInventory.class));
+    }
+
+    public void updateQtyInvenServer(Integer idStore, Integer idProduk, Date expiredDate, Integer qtyBeli){
+        String query = "update \n" +
+                "\ttminventory \n" +
+                "set\n" +
+                "\tqty = qty + :qtyBeli\n" +
+                "where\n" +
+                "\tid_store = :idStore\n" +
+                "\tand id_produk = :idProduk\n" +
+                "\tand expired_date = :expiredDate";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("idStore", idStore);
+        map.addValue("idProduk", idProduk);
+        map.addValue("expiredDate", expiredDate);
+        map.addValue("qtyBeli", qtyBeli);
+        jdbcTemplateServer.update(query,map);
+    }
+
+    public void deleteInvenServer(Integer idInventory, Integer idStore, Date expiredDate){
+        String query = "delete\n" +
+                "from\n" +
+                "\ttminventory\n" +
+                "where\n" +
+                "\ti_id = :idInventory\n" +
+                "\tand id_store = :idStore\n" +
+                "\tand expired_date = :expiredDate";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("idInventory", idInventory);
+        map.addValue("idStore", idStore);
+        map.addValue("expiredDate", expiredDate);
+        jdbcTemplateServer.update(query,map);
+    }
+
 
     public Integer testServer(){
         String query = "select count(*) from tminventory t  ";

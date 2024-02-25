@@ -1,6 +1,7 @@
 package com.minefrozen.pos.controller;
 
 import com.minefrozen.pos.dto.CostumMessage;
+import com.minefrozen.pos.dto.DiskonProdukDto;
 import com.minefrozen.pos.dto.ProdukDto;
 import com.minefrozen.pos.service.ProdukService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,17 @@ public class ProdukController {
     private ProdukService service;
 
     @GetMapping("/findProdukByBarcode")
-    public ResponseEntity<?> findProdukByBarcode(@RequestParam BigInteger barcode, @RequestParam Integer idStore){
-        List<ProdukDto.ProdukKasir> data = service.findProdukByBarcode(barcode, idStore);
-        return ResponseEntity.ok(data);
+    public ResponseEntity<?> findProdukByBarcode(@RequestParam BigInteger barcode){
+        Optional<ProdukDto.ProdukKasir> data = service.findProdukByBarcode(barcode);
+        if (!data.isPresent()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(data.get());
     }
 
     @GetMapping("findProdukBySearchName")
-    public ResponseEntity<?> findProdukBySearchName(@RequestParam(required = false) String paramName, @RequestParam Integer idStore){
-        List<ProdukDto.ProdukKasir> data = service.findProdukBySearchName(paramName, idStore);
+    public ResponseEntity<?> findProdukBySearchName(@RequestParam(required = false) String paramName){
+        List<ProdukDto.ProdukKasir> data = service.findProdukBySearchName(paramName);
         return ResponseEntity.ok(data);
     }
 

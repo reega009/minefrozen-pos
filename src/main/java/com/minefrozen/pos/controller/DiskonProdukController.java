@@ -40,9 +40,8 @@ public class DiskonProdukController {
     @GetMapping("/findCheckDisc")
     public ResponseEntity<?> findCheckDisc(@RequestParam Integer idStore,
                                            @RequestParam Integer idProduk,
-                                           @RequestParam Integer qtyBeli,
-                                           @RequestParam Date expiredDateProduk){
-        Optional<DiskonProdukDto.DiskonProduk> data = service.findCheckDisc(idStore, idProduk, qtyBeli, expiredDateProduk);
+                                           @RequestParam Integer qtyBeli){
+        Optional<DiskonProdukDto.DiskonProduk> data = service.findCheckDisc(idStore, idProduk, qtyBeli);
         if (!data.isPresent()) {
             return ResponseEntity.noContent().build();
         }

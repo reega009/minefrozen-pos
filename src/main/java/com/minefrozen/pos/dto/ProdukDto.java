@@ -22,7 +22,6 @@ public class ProdukDto {
         private Integer berat;
         private String barcode;
         private Integer qtyInven;
-        private Date expiredDate;
     }
 
     @Data

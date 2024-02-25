@@ -41,13 +41,12 @@ public class TransaksiDao {
 
     public void tambahTransaksiRinci(TransaksiDto.TambahTransaksiRinci rinci){
         String query = "INSERT INTO tmtransaksirinci\n" +
-                "(id_transaksi, id_produk, id_store, expired_date, qty, harga_jual, disc_produk, total_per_produk)\n" +
-                "VALUES(:idTransaksi, :idProduk, :idStore, :expiredDate, :qty, :hargaJual, :discProduk, :totalHargaPerProduk)\n";
+                "(id_transaksi, id_produk, id_store, qty, harga_jual, disc_produk, total_per_produk)\n" +
+                "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :discProduk, :totalHargaPerProduk)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi", rinci.getIdTransaksi());
         map.addValue("idProduk", rinci.getIdProduk());
         map.addValue("idStore", rinci.getIdStore());
-        map.addValue("expiredDate", rinci.getExpiredDate());
         map.addValue("qty", rinci.getQty());
         map.addValue("hargaJual", rinci.getHargaJual());
         map.addValue("discProduk", rinci.getDiscProduk());

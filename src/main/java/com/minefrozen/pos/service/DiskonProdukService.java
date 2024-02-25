@@ -27,9 +27,8 @@ public class DiskonProdukService {
 
     public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(Integer idStore,
                                                                 Integer idProduk,
-                                                                Integer qtyBeli,
-                                                                Date expiredDateProduk){
-        return dao.findCheckDisc(idStore, idProduk, qtyBeli, expiredDateProduk);
+                                                                Integer qtyBeli){
+        return dao.findCheckDisc(idStore, idProduk, qtyBeli);
     }
 
     public void save(DiskonProdukDto.DiskonProduk data){

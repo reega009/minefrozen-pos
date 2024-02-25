@@ -39,7 +39,6 @@ public class TransaksiDto {
         private Integer idTransaksi;
         private Integer idStore;
         private Integer idProduk;
-        private Date expiredDate;
         private Integer qty;
         private BigDecimal hargaJual;
         private Integer discProduk;
@@ -86,6 +85,16 @@ public class TransaksiDto {
         private BigDecimal totalHarga;
         private Integer nomorKartuCredit;
 
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ListSubstractInventory{
+        private Integer idInventory;
+        private Integer qty;
+        private Integer idProduk;
+        private Date expiredDate;
     }
 
 }

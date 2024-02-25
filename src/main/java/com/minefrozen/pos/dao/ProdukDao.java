@@ -1,5 +1,6 @@
 package com.minefrozen.pos.dao;
 
+import com.minefrozen.pos.dto.DiskonProdukDto;
 import com.minefrozen.pos.dto.ProdukDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +21,7 @@ public class ProdukDao {
     @Qualifier("posJdbc")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode){
+    public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode){
         String query = "select\n" +
                 "\tt.i_id as id,\n" +
                 "\tt.kode_product as kodeProduct,\n" +
@@ -33,7 +34,16 @@ public class ProdukDao {
                 "where t.barcode = :barcode";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("barcode", barcode);
-        return jdbcTemplate.query(query.toString(), map, new BeanPropertyRowMapper<>(ProdukDto.ProdukKasir.class));
+        try {
+            ProdukDto.ProdukKasir data = jdbcTemplate.queryForObject(query, map, new BeanPropertyRowMapper<>(ProdukDto.ProdukKasir.class));
+            if(data != null){
+                return Optional.of(data);
+            }else{
+                return Optional.empty();
+            }
+        } catch(DataAccessException e){
+            return Optional.empty();
+        }
     }
 
     public List<ProdukDto.ProdukKasir> findProdukBySearchName(String paramName){
