@@ -39,8 +39,15 @@ public class ReturnService {
             dao.saveReturn(data);
             noMaxDao.updateTrNomax("tmreturn");
 
-            // Delete Transaksi rinci
-            dao.deleteTransaksiRinci(data.getIdTransaksi(),data.getIdProduk(),data.getExpiredDate(),data.getIdStore());
+            // Check QTY Trx RINCI
+            Optional<Integer> qtyRinci = dao.findTransaksiRinciForCheckQty(data.getIdProduk(), data.getIdTransaksi());
+            if(qtyRinci.get() == data.getQty()){
+                // Delete Transaksi rinci
+                dao.deleteTransaksiRinci(data.getIdTransaksi(),data.getIdProduk(),data.getIdStore());
+            }else{
+                // Update QTY Rinci
+                dao.updateQtyTransaksiRinci(data.getQty(), data.getTotalReturn(), data.getIdTransaksi(), data.getIdProduk());
+            }
 
             // Update Total Harga Transaksi
             dao.updateTotalHargaTransaksi(data.getIdTransaksi(), data.getIdStore(), data.getTotalReturn());
@@ -49,7 +56,14 @@ public class ReturnService {
             Optional<Integer> checkExists = dao.findExistsTransaksiServer(data.getIdTransaksi(), data.getIdStore());
             if(checkExists != null && !checkExists.isEmpty()){
                 dao.saveReturnServer(data);
-                dao.deleteTransaksiRinciServer(data.getIdTransaksi(),data.getIdProduk(),data.getExpiredDate(),data.getIdStore());
+
+                if(qtyRinci.get() == data.getQty()){
+                    dao.deleteTransaksiRinciServer(data.getIdTransaksi(),data.getIdProduk(),data.getIdStore());
+                }else{
+                    // Update QTY Rinci
+                    dao.updateQtyTransaksiRinciServer(data.getQty(), data.getTotalReturn(), data.getIdTransaksi(), data.getIdProduk());
+                }
+
                 dao.updateTotalHargaTransaksiServer(data.getIdTransaksi(), data.getIdStore(), data.getTotalReturn());
 
                 // Update or save Inventory Server

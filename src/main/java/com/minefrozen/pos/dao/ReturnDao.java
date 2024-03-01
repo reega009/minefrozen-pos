@@ -113,7 +113,25 @@ public class ReturnDao {
         jdbcTemplate.update(query,map);
     }
 
-    public void deleteTransaksiRinci(Integer idTransaksi, Integer idProduk, Date expiredDate, Integer idStore){
+    // Check QTY Transaksi Rinci
+    public Optional<Integer> findTransaksiRinciForCheckQty(Integer idProduk, Integer idTransaksi){
+        String query = "select qty from tmtransaksirinci where id_transaksi = :idTransaksi and id_produk = :idProduk";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("idProduk", idProduk);
+        map.addValue("idTransaksi", idTransaksi);
+        try {
+            Integer data = jdbcTemplateServer.queryForObject(query, map, Integer.class);
+            if(data != null){
+                return Optional.of(data);
+            }else{
+                return Optional.empty();
+            }
+        } catch(DataAccessException e){
+            return Optional.empty();
+        }
+    }
+
+    public void deleteTransaksiRinci(Integer idTransaksi, Integer idProduk, Integer idStore){
         String query = "delete\n" +
                 "from\n" +
                 "\ttmtransaksirinci\n" +
@@ -125,9 +143,24 @@ public class ReturnDao {
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi",idTransaksi);
         map.addValue("idProduk",idProduk);
-        map.addValue("expiredDate",expiredDate);
-        map.addValue("expiredDate",expiredDate);
         map.addValue("idStore",idStore);
+        jdbcTemplate.update(query,map);
+    }
+
+    public void updateQtyTransaksiRinci(Integer qtyReturn, BigDecimal totalReturn, Integer idTransaksi, Integer idProduk){
+        String query = "update\n" +
+                "\ttmtransaksirinci\n" +
+                "set\n" +
+                "\tqty = qty - :qtyReturn,\n" +
+                "\ttotal_per_produk = total_per_produk - :totalReturn\n" +
+                "where\n" +
+                "\tid_transaksi = :idTransaksi\n" +
+                "\tand id_produk = :idProduk";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("qtyReturn", qtyReturn);
+        map.addValue("totalReturn", totalReturn);
+        map.addValue("idTransaksi", idTransaksi);
+        map.addValue("idProduk", idProduk);
         jdbcTemplate.update(query,map);
     }
 
@@ -171,21 +204,35 @@ public class ReturnDao {
         }
     }
 
-    public void deleteTransaksiRinciServer(Integer idTransaksi, Integer idProduk, Date expiredDate, Integer idStore){
+    public void deleteTransaksiRinciServer(Integer idTransaksi, Integer idProduk, Integer idStore){
         String query = "delete\n" +
                 "from\n" +
                 "\ttmtransaksirinci\n" +
                 "where\n" +
                 "\tid_transaksi = :idTransaksi\n" +
                 "\tand id_produk = :idProduk\n" +
-                "\tand expired_date = :expiredDate\n" +
                 "\tand id_store = :idStore";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi",idTransaksi);
         map.addValue("idProduk",idProduk);
-        map.addValue("expiredDate",expiredDate);
-        map.addValue("expiredDate",expiredDate);
         map.addValue("idStore",idStore);
+        jdbcTemplateServer.update(query,map);
+    }
+
+    public void updateQtyTransaksiRinciServer(Integer qtyReturn, BigDecimal totalReturn, Integer idTransaksi, Integer idProduk){
+        String query = "update\n" +
+                "\ttmtransaksirinci\n" +
+                "set\n" +
+                "\tqty = qty - :qtyReturn,\n" +
+                "\ttotal_per_produk = total_per_produk - :totalReturn\n" +
+                "where\n" +
+                "\tid_transaksi = :idTransaksi\n" +
+                "\tand id_produk = :idProduk";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("qtyReturn", qtyReturn);
+        map.addValue("totalReturn", totalReturn);
+        map.addValue("idTransaksi", idTransaksi);
+        map.addValue("idProduk", idProduk);
         jdbcTemplateServer.update(query,map);
     }
 
