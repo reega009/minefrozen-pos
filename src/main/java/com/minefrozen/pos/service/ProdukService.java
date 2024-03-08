@@ -22,12 +22,10 @@ public class ProdukService {
     @Autowired
     private ServerDao serverDao;
 
-    @Transactional
     public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode){
             return dao.findProdukByBarcode(barcode);
     }
 
-    @Transactional
     public List<ProdukDto.ProdukKasir> findProdukBySearchName(String paramName){
             return dao.findProdukBySearchName(paramName);
     }

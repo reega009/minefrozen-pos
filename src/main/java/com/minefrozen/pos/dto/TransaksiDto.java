@@ -97,4 +97,17 @@ public class TransaksiDto {
         private Date expiredDate;
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ChangeTipePembayaran{
+        private Integer idTransaksi;
+        private Integer idStore;
+        private Integer jenisPembayaran;
+        private Integer jenisDebit;
+        private Integer nomorKartuCredit;
+    }
+
+
+
 }

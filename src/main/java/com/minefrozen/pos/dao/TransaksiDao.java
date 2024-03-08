@@ -166,6 +166,26 @@ public class TransaksiDao {
         return jdbcTemplate.query(query, map, new BeanPropertyRowMapper<>(TransaksiDto.TransaksiRinci.class));
     }
 
-
+    public void changeTipePembayaran(TransaksiDto.ChangeTipePembayaran data){
+        String query = "update\n" +
+                "\ttmtransaksi\n" +
+                "set\n" +
+                "\tjenis_pembayaran = :jenisPembayaran,\n" +
+                "\tjenis_debit = :jenisDebit,\n" +
+                "\tnomor_kartu_credit = :nomorKartuCredit,\n" +
+                "\ti_pgun_ubah = :iPgunUbah,\n" +
+                "\td_pgun_ubah = current_timestamp\n" +
+                "where\n" +
+                "\ti_id = :idTransaksi\n" +
+                "\tand id_store = :idStore";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("jenisPembayaran", data.getJenisPembayaran());
+        map.addValue("jenisDebit", data.getJenisDebit());
+        map.addValue("nomorKartuCredit", data.getNomorKartuCredit());
+        map.addValue("iPgunUbah", -1);
+        map.addValue("idTransaksi", data.getIdTransaksi());
+        map.addValue("idStore", data.getIdStore());
+        jdbcTemplate.update(query, map);
+    }
 
 }

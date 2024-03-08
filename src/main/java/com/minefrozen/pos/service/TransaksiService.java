@@ -29,7 +29,7 @@ public class TransaksiService {
     @Autowired
     private PosToServerService serverService;
 
-    @Transactional
+    @Transactional("posTransaction")
     public void TambahTransaksi(TransaksiDto.TambahTransaksi request){
 
         // GET DATE NOW
@@ -83,6 +83,16 @@ public class TransaksiService {
 
     public List<TransaksiDto.TransaksiRinci> findAllRinci(Integer idStore, Integer idTransaksi){
         return dao.findAllRinci(idStore, idTransaksi);
+    }
+
+    @Transactional("posTransaction")
+    public void changeTipePembayaran(TransaksiDto.ChangeTipePembayaran data) throws Exception{
+        try{
+            dao.changeTipePembayaran(data);
+            serverService.changeTipePembayaran(data);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
 }

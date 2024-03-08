@@ -21,6 +21,9 @@ public class ReturnService {
     @Autowired
     private TrnomaxDao noMaxDao;
 
+    @Autowired
+    private PosToServerService serverService;
+
     public List<ReturnDto.Return> findAllReturn(Integer idStore){
         return dao.findAllReturn(idStore);
     }
@@ -30,60 +33,33 @@ public class ReturnService {
         return dao.findTransaksiReturn(kodeTransaksi, idStore);
     }
 
-    @Transactional
+    @Transactional("posTransaction")
     public void saveReturn(ReturnDto.Return data) throws Exception{
         try {
-            // Save Return
-            Integer newId = noMaxDao.findNoMax("tmreturn");
-            data.setId(newId);
-            dao.saveReturn(data);
-            noMaxDao.updateTrNomax("tmreturn");
-
-            // Check QTY Trx RINCI
-            Optional<Integer> qtyRinci = dao.findTransaksiRinciForCheckQty(data.getIdProduk(), data.getIdTransaksi());
-            if(qtyRinci.get() == data.getQty()){
-                // Delete Transaksi rinci
-                dao.deleteTransaksiRinci(data.getIdTransaksi(),data.getIdProduk(),data.getIdStore());
-            }else{
-                // Update QTY Rinci
-                dao.updateQtyTransaksiRinci(data.getQty(), data.getTotalReturn(), data.getIdTransaksi(), data.getIdProduk());
-            }
-
-            // Update Total Harga Transaksi
-            dao.updateTotalHargaTransaksi(data.getIdTransaksi(), data.getIdStore(), data.getTotalReturn());
-
-            // Update Total Harga Transaksi Server / Backup
+            // Check Exists in server
             Optional<Integer> checkExists = dao.findExistsTransaksiServer(data.getIdTransaksi(), data.getIdStore());
             if(checkExists != null && !checkExists.isEmpty()){
-                dao.saveReturnServer(data);
+                // Save Return
+                Integer newId = noMaxDao.findNoMax("tmreturn");
+                data.setId(newId);
+                dao.saveReturn(data);
+                noMaxDao.updateTrNomax("tmreturn");
 
+                // Check QTY Trx RINCI
+                Optional<Integer> qtyRinci = dao.findTransaksiRinciForCheckQty(data.getIdProduk(), data.getIdTransaksi());
                 if(qtyRinci.get() == data.getQty()){
-                    dao.deleteTransaksiRinciServer(data.getIdTransaksi(),data.getIdProduk(),data.getIdStore());
+                    // Delete Transaksi rinci
+                    dao.deleteTransaksiRinci(data.getIdTransaksi(),data.getIdProduk(),data.getIdStore());
                 }else{
                     // Update QTY Rinci
-                    dao.updateQtyTransaksiRinciServer(data.getQty(), data.getTotalReturn(), data.getIdTransaksi(), data.getIdProduk());
+                    dao.updateQtyTransaksiRinci(data.getQty(), data.getTotalReturn(), data.getIdTransaksi(), data.getIdProduk());
                 }
 
-                dao.updateTotalHargaTransaksiServer(data.getIdTransaksi(), data.getIdStore(), data.getTotalReturn());
+                // Update Total Harga Transaksi
+                dao.updateTotalHargaTransaksi(data.getIdTransaksi(), data.getIdStore(), data.getTotalReturn());
 
-                // Update or save Inventory Server
-                Optional<Integer> findExist = dao.findProdukByIdAndExpired(data.getIdProduk(), data.getExpiredDate(), data.getIdStore());
-                if(findExist != null && !findExist.isEmpty()){
-                    dao.updateQtyInven(findExist.get(), data.getQty());
-                }else{
-                    // Get Nomax
-                    Integer newIdInven = noMaxDao.findNoMaxServer("tminventory");
-
-                    ReturnDto.Inventory request = new ReturnDto.Inventory();
-                    request.setIdProduk(data.getIdProduk());
-                    request.setIdStore(data.getIdStore());
-                    request.setQty(data.getQty());
-                    request.setExpiredDate(data.getExpiredDate());
-                    request.setId(newIdInven);
-                    dao.saveInventory(request);
-                    // Update Nomax
-                    noMaxDao.updateTrNomaxServer("tminventory");
-                }
+                // Send Data to server
+                serverService.returnToServer(data);
             }else{
                 throw new Exception("Data not found. Please send backup first.");
             }

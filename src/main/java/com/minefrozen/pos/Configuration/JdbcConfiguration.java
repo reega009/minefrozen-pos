@@ -44,6 +44,7 @@ public class JdbcConfiguration {
 
 
     @Bean(name = "posJdbc")
+    @Primary
     public NamedParameterJdbcTemplate posJdbc(@Qualifier("posDataSource") DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
     }

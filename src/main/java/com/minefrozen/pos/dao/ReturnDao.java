@@ -138,7 +138,6 @@ public class ReturnDao {
                 "where\n" +
                 "\tid_transaksi = :idTransaksi\n" +
                 "\tand id_produk = :idProduk\n" +
-                "\tand expired_date = :expiredDate\n" +
                 "\tand id_store = :idStore";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi",idTransaksi);

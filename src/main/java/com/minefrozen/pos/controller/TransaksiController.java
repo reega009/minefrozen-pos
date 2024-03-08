@@ -44,4 +44,16 @@ public class TransaksiController {
         return ResponseEntity.ok(data);
     }
 
+    @PostMapping("/changeTipePembayaran")
+    public ResponseEntity<?> saveTransaksi(@RequestBody TransaksiDto.ChangeTipePembayaran data){
+        try {
+            log.info("Request : {}", data);
+            service.changeTipePembayaran(data);
+            return ResponseEntity.ok(new CostumMessage(HttpStatus.OK, "Data Terupdate"));
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CostumMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi Kesalahan Server"));
+        }
+    }
+
 }
