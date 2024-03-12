@@ -33,10 +33,13 @@ public class ProdukDto {
         private String kodeProduct;
         private String namaProduct;
         private BigInteger barcode;
+        private Integer idSupplier;
+        private Integer idCategory;
         private Integer berat;
         private BigDecimal hargaBeli;
         private BigDecimal hargaJual;
         private Integer minJumlahBarang;
+        private String descProduk;
         private Integer iPgunRekam;
         private Timestamp dPgunRekam;
         private Integer iPgunUbah;

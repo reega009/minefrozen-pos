@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -77,8 +78,8 @@ public class TransaksiService {
         }
     }
 
-    public List<TransaksiDto.Transaksi> findAll(Integer idStore, Integer nomorKasir, Integer shift){
-        return dao.findAll(idStore, nomorKasir, shift);
+    public List<TransaksiDto.Transaksi> findAll(Integer idStore, Integer nomorKasir, Integer shift, Date tanggalAwal, Date tanggalAkhir){
+        return dao.findAll(idStore, nomorKasir, shift, tanggalAwal, tanggalAkhir);
     }
 
     public List<TransaksiDto.TransaksiRinci> findAllRinci(Integer idStore, Integer idTransaksi){

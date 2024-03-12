@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 
 @Repository
@@ -61,7 +62,7 @@ public class TransaksiDao {
         return jdbcTemplate.queryForObject(query, map, Integer.class);
     }
 
-    public List<TransaksiDto.Transaksi> findAll(Integer idStore, Integer nomorKasir, Integer shift){
+    public List<TransaksiDto.Transaksi> findAll(Integer idStore, Integer nomorKasir, Integer shift, Date tanggalAwal, Date tanggalAkhir){
         String query = "select\n" +
                 "\tnoUrut,\n" +
                 "\tid,\n" +
@@ -88,8 +89,8 @@ public class TransaksiDao {
                 "\t\t\twhen trx.jenis_pembayaran = 3 then 'Credit'\n" +
                 "\t\t\twhen trx.jenis_pembayaran = 4 then 'Piutang'\n" +
                 "\t\tend as namaPembayaran,\n" +
-                "\t\ttrx.nomor_kasir as nomorKasir,\n" +
-                "\t\ttrx.shift as shift,\n" +
+                "\t\tconcat('Kasir ',trx.nomor_kasir) as nomorKasir,\n" +
+                "\t\tconcat('Shift ',trx.shift) as shift,\n" +
                 "\t\ttrx.kode_transaksi as kodeTransaksi,\n" +
                 "\t\ttrx.total_harga as totalHargaPerTransaksi,\n" +
                 "\t\ttrx.disc_member as discMember,\n" +
@@ -101,13 +102,14 @@ public class TransaksiDao {
                 "\twhere trx.id_store = :idStore\n" +
                 "\tand nomor_kasir = :nomorKasir\n" +
                 "\tand shift = :shift\n" +
+                "\tAND trx.d_pgun_rekam::date BETWEEN :tanggalAwal AND :tanggalAkhir\n" +
                 "union all\n" +
                 "\tselect distinct\n" +
                 "\t\t2 as noUrut,\n" +
                 "\t\t0 as id,\n" +
                 "\t\t'' as namaPembayaran,\n" +
-                "\t\t0 as nomorKasir,\n" +
-                "\t\t0 as shift,\n" +
+                "\t\t'' as nomorKasir,\n" +
+                "\t\t'' as shift,\n" +
                 "\t\t'TOTAL' as kodeTransaksi,\n" +
                 "\t\tsum(trx.total_harga) - (sum(trx.total_harga) * sum(disc_member) / 100) as totalHargaPerTransaksi,\n" +
                 "\t\t0 as discMember,\n" +
@@ -119,11 +121,14 @@ public class TransaksiDao {
                 "\twhere trx.id_store = :idStore\n" +
                 "\tand nomor_kasir = :nomorKasir\n" +
                 "\tand shift = :shift\n" +
+                "\tAND trx.d_pgun_rekam::date BETWEEN :tanggalAwal AND :tanggalAkhir\n" +
                 "\t) as rekapTransaksi order by nourut asc, kodeTransaksi asc";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idStore", idStore);
         map.addValue("nomorKasir", nomorKasir);
         map.addValue("shift", shift);
+        map.addValue("tanggalAwal", tanggalAwal);
+        map.addValue("tanggalAkhir", tanggalAkhir);
         return jdbcTemplate.query(query, map, new BeanPropertyRowMapper<>(TransaksiDto.Transaksi.class));
     }
 

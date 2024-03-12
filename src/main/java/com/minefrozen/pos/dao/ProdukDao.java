@@ -21,6 +21,10 @@ public class ProdukDao {
     @Qualifier("posJdbc")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    @Autowired
+    @Qualifier("serverJdbc")
+    private NamedParameterJdbcTemplate jdbcTemplateServer;
+
     public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode){
         String query = "select\n" +
                 "\tt.i_id as id,\n" +
@@ -75,7 +79,11 @@ public class ProdukDao {
                 "\tt.kode_product as kodeProduct,\n" +
                 "\tt.nama_product as namaProduct,\n" +
                 "\tt.barcode,\n" +
+                "\tt.id_supplier as idSupplier,\n" +
+                "\tt.id_category as idCategory,\n" +
                 "\tt.berat,\n" +
+                "\tt.min_jumlah_barang as minJumlahBarang,\n" +
+                "\tt.desc_product as descProduk,\n" +
                 "\tt.harga_beli as hargaBeli,\n" +
                 "\tt.harga_jual as hargaJual,\n" +
                 "\tt.i_pgun_rekam as iPgunRekam,\n" +
@@ -95,7 +103,11 @@ public class ProdukDao {
                 "\tt.kode_product as kodeProduct,\n" +
                 "\tt.nama_product as namaProduct,\n" +
                 "\tt.barcode,\n" +
+                "\tt.id_supplier as idSupplier,\n" +
+                "\tt.id_category as idCategory,\n" +
                 "\tt.berat,\n" +
+                "\tt.min_jumlah_barang as minJumlahBarang,\n" +
+                "\tt.desc_product as descProduk,\n" +
                 "\tt.harga_beli as hargaBeli,\n" +
                 "\tt.harga_jual as hargaJual,\n" +
                 "\tt.i_pgun_rekam as iPgunRekam,\n" +
@@ -185,6 +197,31 @@ public class ProdukDao {
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id",id);
         jdbcTemplate.update(query,map);
+    }
+
+    // Server
+    public List<ProdukDto.Produk> findAllServer() {
+        String query = "select\n" +
+                "\tt.i_id as id,\n" +
+                "\tt.kode_product as kodeProduct,\n" +
+                "\tt.nama_product as namaProduct,\n" +
+                "\tt.barcode,\n" +
+                "\tt.id_supplier as idSupplier,\n" +
+                "\tt.id_category as idCategory,\n" +
+                "\tt.berat,\n" +
+                "\tt.min_jumlah_barang as minJumlahBarang,\n" +
+                "\tt.desc_product as descProduk,\n" +
+                "\tt.harga_beli as hargaBeli,\n" +
+                "\tt.harga_jual as hargaJual,\n" +
+                "\tt.i_pgun_rekam as iPgunRekam,\n" +
+                "\tt.d_pgun_rekam as dPgunRekam,\n" +
+                "\tt.i_pgun_ubah as iPgunUbah,\n" +
+                "\tt.d_pgun_ubah as dPgunUbah\n" +
+                "from\n" +
+                "\ttrproduct t";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        return jdbcTemplateServer.query(query, map, new BeanPropertyRowMapper<>(ProdukDto.Produk.class));
+
     }
 
 

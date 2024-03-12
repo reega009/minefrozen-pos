@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -33,8 +34,8 @@ public class TransaksiController {
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<?> findAll(@RequestParam Integer idStore ,@RequestParam Integer nomorKasir,@RequestParam Integer shift){
-        List<TransaksiDto.Transaksi> data = service.findAll(idStore, nomorKasir, nomorKasir);
+    public ResponseEntity<?> findAll(@RequestParam Integer idStore , @RequestParam Integer nomorKasir, @RequestParam Integer shift,@RequestParam Date tanggalAwal,@RequestParam Date tanggalAkhir){
+        List<TransaksiDto.Transaksi> data = service.findAll(idStore, nomorKasir, shift, tanggalAwal, tanggalAkhir);
         return ResponseEntity.ok(data);
     }
 
