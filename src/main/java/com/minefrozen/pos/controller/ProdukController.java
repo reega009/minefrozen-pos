@@ -83,5 +83,15 @@ public class ProdukController {
         }
     }
 
+    @PostMapping("/matchingDataWithServer")
+    public ResponseEntity<?> matchingDataWithServer(){
+        try {
+            service.matchingDataWithServer();
+            return ResponseEntity.ok(new CostumMessage(HttpStatus.OK, "Data Terupdate"));
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CostumMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi Kesalahan Server"));
+        }
+    }
 
 }

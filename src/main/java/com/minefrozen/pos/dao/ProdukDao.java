@@ -135,33 +135,56 @@ public class ProdukDao {
         String query = "insert\n" +
                 "\tinto\n" +
                 "\ttrproduct\n" +
-                "(kode_product,\n" +
+                "(\n" +
+                "\ti_id,\n" +
+                "\tkode_product,\n" +
                 "\tnama_product,\n" +
                 "\tbarcode,\n" +
+                "\tid_supplier,\n" +
+                "\tid_category,\n" +
                 "\tberat,\n" +
                 "\tharga_beli,\n" +
                 "\tharga_jual,\n" +
+                "\tmin_jumlah_barang,\n" +
+                "\tdesc_product,\n" +
                 "\ti_pgun_rekam,\n" +
                 "\td_pgun_rekam,\n" +
-                "\tmin_jumlah_barang)\n" +
-                "values(:kodeProduct,\n" +
-                ":namaProduct,\n" +
-                ":barcode,\n" +
-                ":berat,\n" +
-                ":hargaBeli,\n" +
-                ":hargaJual,\n" +
-                ":iPgunRekam,\n" +
-                "CURRENT_TIMESTAMP,\n" +
-                ":minJumlahBarang)\n";
+                "\ti_pgun_ubah,\n" +
+                "\td_pgun_ubah\n" +
+                ")\n" +
+                "values(\n" +
+                "\t:id,\n" +
+                "\t:kodeProduct,\n" +
+                "\t:namaProduct,\n" +
+                "\t:barcode,\n" +
+                "\t:idSupplier,\n" +
+                "\t:idCategory,\n" +
+                "\t:berat,\n" +
+                "\t:hargaBeli,\n" +
+                "\t:hargaJual,\n" +
+                "\t:minJumlahBarang,\n" +
+                "\t:descProduk,\n" +
+                "\t:iPgunRekam,\n" +
+                "\t:dPgunRekam,\n" +
+                "\t:iPgunUbah,\n" +
+                "\t:dPgunUbah\n" +
+                ")\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("id", data.getId());
         map.addValue("kodeProduct", data.getKodeProduct());
         map.addValue("namaProduct", data.getNamaProduct());
         map.addValue("barcode", data.getBarcode());
+        map.addValue("idSupplier", data.getIdSupplier());
+        map.addValue("idCategory", data.getIdCategory());
         map.addValue("berat", data.getBerat());
         map.addValue("hargaBeli", data.getHargaBeli());
         map.addValue("hargaJual", data.getHargaJual());
-        map.addValue("iPgunRekam", 1);
         map.addValue("minJumlahBarang", data.getMinJumlahBarang());
+        map.addValue("descProduk", data.getDescProduk());
+        map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("dPgunRekam", data.getDPgunRekam());
+        map.addValue("iPgunUbah", data.getIPgunUbah());
+        map.addValue("dPgunUbah", data.getDPgunUbah());
         jdbcTemplate.update(query,map);
     }
 
@@ -196,6 +219,12 @@ public class ProdukDao {
         String query = "delete from trproduct where i_id = :id";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id",id);
+        jdbcTemplate.update(query,map);
+    }
+
+    public void deleteAllProduct(){
+        String query = "delete from trproduct";
+        MapSqlParameterSource map = new MapSqlParameterSource();
         jdbcTemplate.update(query,map);
     }
 

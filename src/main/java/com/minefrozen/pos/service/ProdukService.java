@@ -50,6 +50,22 @@ public class ProdukService {
         dao.delete(id);
     }
 
+    // Matching data with Server
+    @Transactional("posTransaction")
+    public void matchingDataWithServer(){
+        try {
+            List<ProdukDto.Produk> datas = dao.findAllServer();
 
+            if(!datas.isEmpty()){
+                dao.deleteAllProduct();
+                for (ProdukDto.Produk data : datas){
+                    dao.save(data);
+                }
+            }
+        }catch (Exception e){
+            log.error("An error occurred: " + e.getMessage());
+            throw e;
+        }
+    }
 
 }
