@@ -53,8 +53,8 @@ public class TransaksiDto {
         private Integer idStore;
         private Integer jenisPembayaran;
         private String namaPembayaran;
-        private Integer nomorKasir;
-        private Integer shift;
+        private String nomorKasir;
+        private String shift;
         private String kodeTransaksi;
         private BigDecimal totalHargaPerTransaksi;
         private Integer idMember;
