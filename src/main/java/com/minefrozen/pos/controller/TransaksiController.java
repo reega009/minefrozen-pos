@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/pos/transaksi")
+@RequestMapping("/api-pos/transaksi")
 @Slf4j
 public class TransaksiController {
 

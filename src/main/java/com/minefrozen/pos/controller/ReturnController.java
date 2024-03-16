@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/pos/return")
+@RequestMapping("/api-pos/return")
 public class ReturnController {
 
     @Autowired

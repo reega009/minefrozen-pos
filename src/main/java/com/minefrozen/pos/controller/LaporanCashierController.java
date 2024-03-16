@@ -15,7 +15,7 @@ import java.sql.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pos/laporan-cashier")
+@RequestMapping("/api-pos/laporan-cashier")
 public class LaporanCashierController {
 
     @Autowired

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/pos/pos-to-server")
+@RequestMapping("/api-pos/pos-to-server")
 public class PosToServerController {
 
     @Autowired

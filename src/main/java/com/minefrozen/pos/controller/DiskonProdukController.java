@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/pos/diskon")
+@RequestMapping("/api-pos/diskon")
 public class DiskonProdukController {
 
     @Autowired

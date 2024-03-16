@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/pos/member")
+@RequestMapping("/api-pos/member")
 public class MemberController {
 
     @Autowired

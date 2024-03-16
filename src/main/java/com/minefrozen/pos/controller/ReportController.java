@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/pos/report")
+@RequestMapping("/api-pos/report")
 @Slf4j
 public class ReportController {
 
