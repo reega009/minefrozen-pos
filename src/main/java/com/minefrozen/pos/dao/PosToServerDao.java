@@ -41,7 +41,7 @@ public class PosToServerDao {
         map.addValue("tanggalTenggatPiutang", tambahTransaksi.getTanggalTenggatPiutang());
         map.addValue("nomorKartuCredit", tambahTransaksi.getNomorKartuCredit());
         map.addValue("jenisDebit", tambahTransaksi.getJenisDebit());
-        map.addValue("iPgunRekam", 1);
+        map.addValue("iPgunRekam", tambahTransaksi.getIPgunRekam());
         map.addValue("dPgunRekam", tambahTransaksi.getDPgunRekam());
         jdbcTemplatePos.update(query, map);
     }
@@ -127,7 +127,7 @@ public class PosToServerDao {
         map.addValue("tanggalTenggatPiutang", tambahTransaksi.getTanggalTenggatPiutang());
         map.addValue("nomorKartuCredit", tambahTransaksi.getNomorKartuCredit());
         map.addValue("jenisDebit", tambahTransaksi.getJenisDebit());
-        map.addValue("iPgunRekam", 1);
+        map.addValue("iPgunRekam", tambahTransaksi.getIPgunRekam());
         map.addValue("dPgunRekam", tambahTransaksi.getDPgunRekam());
         jdbcTemplateServer.update(query, map);
     }

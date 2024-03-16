@@ -155,7 +155,7 @@ public class DiskonProdukDao {
         map.addValue("jenisDiskon", data.getJenisDiskon());
         map.addValue("idProduk", data.getIdProduk());
         map.addValue("disc", data.getDiscProduk());
-        map.addValue("iPgunRekam", 1);
+        map.addValue("iPgunRekam", data.getIPgunRekam());
         map.addValue("tanggalAwalPeriode", data.getTanggalAwalPeriode());
         map.addValue("tanggalAkhirPeriode", data.getTanggalAkhirPeriode());
         map.addValue("idProdukBonus", data.getIdProdukBonus());

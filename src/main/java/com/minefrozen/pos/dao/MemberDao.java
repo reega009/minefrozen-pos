@@ -148,7 +148,7 @@ public class MemberDao {
         map.addValue("namaMember", data.getNamaMember());
         map.addValue("nomorHandphone", data.getNomorHandphone());
         map.addValue("discMember", data.getDiscMember());
-        map.addValue("iPgunRekam", 1);
+        map.addValue("iPgunRekam", data.getIPgunRekam());
         jdbcTemplate.update(query,map);
     }
 

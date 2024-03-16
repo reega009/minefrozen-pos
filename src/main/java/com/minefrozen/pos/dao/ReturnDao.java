@@ -107,7 +107,7 @@ public class ReturnDao {
         map.addValue("hargaJual", data.getHargaJual());
         map.addValue("discProduk", data.getDiscProduk());
         map.addValue("idStore", data.getIdStore());
-        map.addValue("iPgunRekam", -1);
+        map.addValue("iPgunRekam", data.getIPgunRekam());
         map.addValue("qty", data.getQty());
         map.addValue("totalReturn", data.getTotalReturn());
         jdbcTemplate.update(query,map);
@@ -284,7 +284,7 @@ public class ReturnDao {
         map.addValue("hargaJual", data.getHargaJual());
         map.addValue("discProduk", data.getDiscProduk());
         map.addValue("idStore", data.getIdStore());
-        map.addValue("iPgunRekam", -1);
+        map.addValue("iPgunRekam", data.getIPgunRekam());
         map.addValue("qty", data.getQty());
         map.addValue("totalReturn", data.getTotalReturn());
         jdbcTemplateServer.update(query,map);
@@ -326,7 +326,7 @@ public class ReturnDao {
         map.addValue("idStore", data.getIdStore());
         map.addValue("qty", data.getQty());
         map.addValue("expiredDate", data.getExpiredDate());
-        map.addValue("iPgunRekam", 1);
+        map.addValue("iPgunRekam", data.getIPgunRekam());
         jdbcTemplateServer.update(query, map);
     }
 
