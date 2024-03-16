@@ -31,7 +31,7 @@ public class TransaksiService {
     private PosToServerService serverService;
 
     @Transactional("posTransaction")
-    public void TambahTransaksi(TransaksiDto.TambahTransaksi request){
+    public Integer TambahTransaksi(TransaksiDto.TambahTransaksi request){
 
         // GET DATE NOW
         LocalDate currentDate = LocalDate.now();
@@ -72,6 +72,7 @@ public class TransaksiService {
             // Update TRNOMAX
             noMaxDao.updateTrNomax("tmtransaksi");
 
+            return newId;
         }catch (Exception e){
             log.info("An error occurred: " + e.getMessage());
             throw e;

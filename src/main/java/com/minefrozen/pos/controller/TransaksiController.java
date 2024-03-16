@@ -44,8 +44,8 @@ public class TransaksiController {
 
         try {
             log.info("Request : {}", data);
-            service.TambahTransaksi(data);
-            return ResponseEntity.ok(new CostumMessage(HttpStatus.OK, "Data Tersimpan"));
+            Integer newId = service.TambahTransaksi(data);
+            return ResponseEntity.ok(new CostumMessage(HttpStatus.OK, newId.toString()));
         } catch (Exception throwables) {
             throwables.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CostumMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi Kesalahan Server"));
