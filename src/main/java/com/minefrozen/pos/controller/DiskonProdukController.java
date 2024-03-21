@@ -43,16 +43,16 @@ public class DiskonProdukController {
         return ResponseEntity.ok(data.get());
     }
 
-    @GetMapping("/findCheckDisc")
-    public ResponseEntity<?> findCheckDisc(@RequestParam Integer idStore,
-                                           @RequestParam Integer idProduk,
-                                           @RequestParam Integer qtyBeli){
-        Optional<DiskonProdukDto.DiskonProduk> data = service.findCheckDisc(idStore, idProduk, qtyBeli);
-        if (!data.isPresent()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(data.get());
-    }
+//    @GetMapping("/findCheckDisc")
+//    public ResponseEntity<?> findCheckDisc(@RequestParam Integer idStore,
+//                                           @RequestParam Integer idProduk,
+//                                           @RequestParam Integer qtyBeli){
+//        Optional<DiskonProdukDto.DiskonProduk> data = service.findCheckDisc(idStore, idProduk, qtyBeli);
+//        if (!data.isPresent()) {
+//            return ResponseEntity.noContent().build();
+//        }
+//        return ResponseEntity.ok(data.get());
+//    }
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody DiskonProdukDto.DiskonProduk data){

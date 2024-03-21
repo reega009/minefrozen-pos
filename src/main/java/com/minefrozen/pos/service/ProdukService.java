@@ -1,7 +1,9 @@
 package com.minefrozen.pos.service;
 
+import com.minefrozen.pos.dao.DiskonProdukDao;
 import com.minefrozen.pos.dao.ProdukDao;
 import com.minefrozen.pos.dao.ServerDao;
+import com.minefrozen.pos.dto.DiskonProdukDto;
 import com.minefrozen.pos.dto.ProdukDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +22,42 @@ public class ProdukService {
     private ProdukDao dao;
 
     @Autowired
+    private DiskonProdukDao diskonDao;
+
+    @Autowired
     private ServerDao serverDao;
 
     public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode){
-            return dao.findProdukByBarcode(barcode);
+        Optional<ProdukDto.ProdukKasir> dataProduk = dao.findProdukByBarcode(barcode);
+
+        Optional<DiskonProdukDto.DiskonProduk> disc = diskonDao.findCheckDisc(dataProduk.get().getId());
+        if(disc.isPresent()){
+            dataProduk.get().setIsDiskon(true);
+            dataProduk.get().setJenisDiskon(disc.get().getJenisDiskon());
+            dataProduk.get().setDiscProduk(disc.get().getDiscProduk());
+            dataProduk.get().setIdProdukBonus(disc.get().getIdProdukBonus());
+            dataProduk.get().setMinQtyToGetBonus(disc.get().getMinQtyToGetBonus());
+        }else{
+            dataProduk.get().setIsDiskon(false);
+        }
+        return dataProduk;
     }
 
-    public List<ProdukDto.ProdukKasir> findProdukBySearchName(String paramName){
-            return dao.findProdukBySearchName(paramName);
-    }
+    public Optional<ProdukDto.ProdukKasir> findProdukBySearchName(String paramName){
+        Optional<ProdukDto.ProdukKasir> dataProduk = dao.findProdukBySearchName(paramName);
 
+        Optional<DiskonProdukDto.DiskonProduk> disc = diskonDao.findCheckDisc(dataProduk.get().getId());
+        if(disc.isPresent()){
+            dataProduk.get().setIsDiskon(true);
+            dataProduk.get().setJenisDiskon(disc.get().getJenisDiskon());
+            dataProduk.get().setDiscProduk(disc.get().getDiscProduk());
+            dataProduk.get().setIdProdukBonus(disc.get().getIdProdukBonus());
+            dataProduk.get().setMinQtyToGetBonus(disc.get().getMinQtyToGetBonus());
+        }else{
+            dataProduk.get().setIsDiskon(false);
+        }
+        return dataProduk;
+    }
 
     public List<ProdukDto.Produk> findAll(){
         return dao.findAll();

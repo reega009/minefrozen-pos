@@ -22,6 +22,13 @@ public class ProdukDto {
         private Integer berat;
         private String barcode;
         private Integer qtyInven;
+        private Boolean isDiskon;
+        private String jenisDiskon;
+        //        Jenis Disc
+        private BigDecimal discProduk;
+        //        Jenis Beli 2 Gratis 1
+        private Integer idProdukBonus;
+        private Integer minQtyToGetBonus;
     }
 
     @Data

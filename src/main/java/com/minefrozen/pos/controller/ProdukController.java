@@ -29,10 +29,13 @@ public class ProdukController {
         return ResponseEntity.ok(data.get());
     }
 
-    @GetMapping("findProdukBySearchName")
-    public ResponseEntity<?> findProdukBySearchName(@RequestParam(required = false) String paramName){
-        List<ProdukDto.ProdukKasir> data = service.findProdukBySearchName(paramName);
-        return ResponseEntity.ok(data);
+    @GetMapping("/findProdukBySearchName")
+    public ResponseEntity<?> findProdukBySearchName(@RequestParam String paramName){
+        Optional<ProdukDto.ProdukKasir> data = service.findProdukBySearchName(paramName);
+        if (!data.isPresent()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(data.get());
     }
 
     @GetMapping("/findAll")

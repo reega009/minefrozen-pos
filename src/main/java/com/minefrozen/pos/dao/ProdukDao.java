@@ -50,8 +50,8 @@ public class ProdukDao {
         }
     }
 
-    public List<ProdukDto.ProdukKasir> findProdukBySearchName(String paramName){
-        String baseQuery = "select\n" +
+    public Optional<ProdukDto.ProdukKasir> findProdukBySearchName(String paramName){
+        String query = "select\n" +
                 "\tt.i_id as id,\n" +
                 "\tt.kode_product as kodeProduct,\n" +
                 "\tt.nama_product as namaProduct,\n" +
@@ -60,16 +60,20 @@ public class ProdukDao {
                 "\tt.barcode\n" +
                 "from\n" +
                 "\ttrproduct t\n" +
-                "where 1 = 1 \t";
-        StringBuilder query = new StringBuilder(baseQuery);
+                "where lower(nama_product) = lower(:paramName)";
 
         MapSqlParameterSource map = new MapSqlParameterSource();
-        if(paramName != null){
-            query.append(" and lower(nama_product) like lower(:paramName)");
-            map.addValue("paramName", new StringBuilder("%")
-                    .append(paramName).append("%").toString());
+        map.addValue("paramName", paramName);
+        try {
+            ProdukDto.ProdukKasir data = jdbcTemplate.queryForObject(query, map, new BeanPropertyRowMapper<>(ProdukDto.ProdukKasir.class));
+            if(data != null){
+                return Optional.of(data);
+            }else{
+                return Optional.empty();
+            }
+        } catch(DataAccessException e){
+            return Optional.empty();
         }
-        return jdbcTemplate.query(query.toString(), map, new BeanPropertyRowMapper<>(ProdukDto.ProdukKasir.class));
     }
 
 

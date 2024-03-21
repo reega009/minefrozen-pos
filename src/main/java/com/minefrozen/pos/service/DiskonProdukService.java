@@ -30,11 +30,11 @@ public class DiskonProdukService {
         return dao.findById(id, idStore);
     }
 
-    public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(Integer idStore,
-                                                                Integer idProduk,
-                                                                Integer qtyBeli){
-        return dao.findCheckDisc(idStore, idProduk, qtyBeli);
-    }
+//    public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(Integer idStore,
+//                                                                Integer idProduk,
+//                                                                Integer qtyBeli){
+//        return dao.findCheckDisc(idStore, idProduk, qtyBeli);
+//    }
 
     @Transactional("posTransaction")
     public void save(DiskonProdukDto.DiskonProduk data){

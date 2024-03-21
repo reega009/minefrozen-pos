@@ -78,9 +78,8 @@ public class DiskonProdukDao {
         }
     }
 
-    public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(Integer idStore,
-                                                                Integer idProduk,
-                                                                Integer qtyBeli){
+    public Optional<DiskonProdukDto.DiskonProduk> findCheckDisc(
+                                                                Integer idProduk){
         String query = "SELECT\n" +
                 "    id,\n" +
                 "    id_store AS idStore,\n" +
@@ -101,16 +100,11 @@ public class DiskonProdukDao {
                 "    COALESCE(syarat_qty_bonus, 0) AS minQtyToGetBonus\n" +
                 "FROM\n" +
                 "    tmdiskonproduk\n" +
-                "WHERE\n" +
-                "    id_store = :idStore\n" +
-                "    AND id_produk = :idProduk\n" +
+                "where id_produk = :idProduk\n" +
                 "    AND current_timestamp::date BETWEEN tanggal_awal_periode::date AND tanggal_akhir_periode::date\n" +
-                "    and :qtyBeli >= syarat_qty_bonus\n" +
-                "    order by d_pgun_rekam desc limit 1\n";
+                "    order by id desc limit 1\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
-        map.addValue("idStore",idStore);
         map.addValue("idProduk",idProduk);
-        map.addValue("qtyBeli",qtyBeli);
         try {
             DiskonProdukDto.DiskonProduk data = jdbcTemplate.queryForObject(query, map, new BeanPropertyRowMapper<>(DiskonProdukDto.DiskonProduk.class));
             if(data != null){
