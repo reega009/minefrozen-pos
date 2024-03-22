@@ -93,7 +93,14 @@ public class ProdukDao {
                 "\tt.i_pgun_rekam as iPgunRekam,\n" +
                 "\tt.d_pgun_rekam as dPgunRekam,\n" +
                 "\tt.i_pgun_ubah as iPgunUbah,\n" +
-                "\tt.d_pgun_ubah as dPgunUbah\n" +
+                "\tt.d_pgun_ubah as dPgunUbah,\n" +
+                "\tcoalesce(\n" +
+                "\t\t(select true from tmdiskonproduk td where td.id_produk = t.i_id AND current_timestamp::date BETWEEN tanggal_awal_periode::date AND tanggal_akhir_periode::date order by id desc limit 1)\n" +
+                "\t, false) as isDiskon,\n" +
+                "\t(select jenis_diskon from tmdiskonproduk td where td.id_produk = t.i_id AND current_timestamp::date BETWEEN tanggal_awal_periode::date AND tanggal_akhir_periode::date order by id desc limit 1) as jenisDiskon,\n" +
+                "\t(select coalesce(disc, 100) from tmdiskonproduk td where td.id_produk = t.i_id AND current_timestamp::date BETWEEN tanggal_awal_periode::date AND tanggal_akhir_periode::date order by id desc limit 1) as discProduk,\n" +
+                "\t(select id_produk_bonus from tmdiskonproduk td where td.id_produk = t.i_id AND current_timestamp::date BETWEEN tanggal_awal_periode::date AND tanggal_akhir_periode::date order by id desc limit 1) as idProdukBonus,\n" +
+                "\t(select syarat_qty_bonus from tmdiskonproduk td where td.id_produk = t.i_id AND current_timestamp::date BETWEEN tanggal_awal_periode::date AND tanggal_akhir_periode::date order by id desc limit 1) as minQtyToGetBonus\n" +
                 "from\n" +
                 "\ttrproduct t";
         MapSqlParameterSource map = new MapSqlParameterSource();

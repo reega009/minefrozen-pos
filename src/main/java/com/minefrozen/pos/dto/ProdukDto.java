@@ -51,6 +51,13 @@ public class ProdukDto {
         private Timestamp dPgunRekam;
         private Integer iPgunUbah;
         private Timestamp dPgunUbah;
+        private Boolean isDiskon;
+        private String jenisDiskon;
+        //        Jenis Disc
+        private BigDecimal discProduk;
+        //        Jenis Beli 2 Gratis 1
+        private Integer idProdukBonus;
+        private Integer minQtyToGetBonus;
     }
 
 }
