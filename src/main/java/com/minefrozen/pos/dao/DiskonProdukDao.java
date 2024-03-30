@@ -23,21 +23,23 @@ public class DiskonProdukDao {
 
     public List<DiskonProdukDto.DiskonProduk> findAll(Integer idStore){
         String query = "select\n" +
-                "\tid,\n" +
-                "\tid_store as idStore,\n" +
-                "\tjenis_diskon as jenisDiskon,\n" +
-                "\tid_produk as idProduk,\n" +
-                "\tdisc,\n" +
-                "\ti_pgun_rekam as iPgunRekam,\n" +
-                "\td_pgun_rekam as dPgunRekam,\n" +
-                "\ti_pgun_ubah as iPgunUbah,\n" +
-                "\td_pgun_ubah as dPgunUbah,\n" +
-                "\ttanggal_awal_periode as tanggalAwalPeriode,\n" +
-                "\ttanggal_akhir_periode as tanggalAkhirPeriode,\n" +
-                "\tid_produk_bonus as idProdukBonus,\n" +
-                "\tsyarat_qty_bonus as minQtyToGetBonus\n" +
+                "\tt.id,\n" +
+                "\tt.id_store as idStore,\n" +
+                "\tt.jenis_diskon as jenisDiskon,\n" +
+                "\tt.id_produk as idProduk,\n" +
+                "\ttprd.nama_product as namaProduk,\n" +
+                "\tt.disc,\n" +
+                "\tt.i_pgun_rekam as iPgunRekam,\n" +
+                "\tt.d_pgun_rekam as dPgunRekam,\n" +
+                "\tt.i_pgun_ubah as iPgunUbah,\n" +
+                "\tt.d_pgun_ubah as dPgunUbah,\n" +
+                "\tt.tanggal_awal_periode as tanggalAwalPeriode,\n" +
+                "\tt.tanggal_akhir_periode as tanggalAkhirPeriode,\n" +
+                "\tt.id_produk_bonus as idProdukBonus,\n" +
+                "\tt.syarat_qty_bonus as minQtyToGetBonus\n" +
                 "from\n" +
-                "\ttmdiskonproduk\n" +
+                "\ttmdiskonproduk t\n" +
+                "\tleft join trproduct tprd on t.id_produk = tprd.i_id\n" +
                 "where id_store = :idStore\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idStore", idStore);
