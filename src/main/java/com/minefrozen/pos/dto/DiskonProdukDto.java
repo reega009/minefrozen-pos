@@ -29,6 +29,7 @@ public class DiskonProdukDto {
         private BigDecimal discProduk;
 //        Jenis Beli 2 Gratis 1
         private Integer idProdukBonus;
+        private String namaProdukBonus;
         private Integer minQtyToGetBonus;
 
     }

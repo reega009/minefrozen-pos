@@ -36,6 +36,7 @@ public class DiskonProdukDao {
                 "\tt.tanggal_awal_periode as tanggalAwalPeriode,\n" +
                 "\tt.tanggal_akhir_periode as tanggalAkhirPeriode,\n" +
                 "\tt.id_produk_bonus as idProdukBonus,\n" +
+                "\t(select nama_product from trproduct t2 where i_id = t.id_produk_bonus) as namaProdukBonus,\n" +
                 "\tt.syarat_qty_bonus as minQtyToGetBonus\n" +
                 "from\n" +
                 "\ttmdiskonproduk t\n" +
