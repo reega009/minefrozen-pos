@@ -84,9 +84,12 @@ public class TransaksiDao {
                 "\t\t\t\tcase \n" +
                 "\t\t\t\t\twhen trx.jenis_debit = 1 then 'Debit BCA'\n" +
                 "\t\t\t\t\twhen trx.jenis_debit = 2 then 'Debit Mandiri'\n" +
-                "\t\t\t\t\twhen trx.jenis_debit = 3 then 'QRIS'\n" +
                 "\t\t\t\tend\n" +
-                "\t\t\twhen trx.jenis_pembayaran = 3 then 'Credit'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 3 then \n" +
+                "\t\t\t\tcase \n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 1 then 'Credit BCA'\n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 2 then 'Credit Mandiri'\n" +
+                "\t\t\t\tend\n" +
                 "\t\t\twhen trx.jenis_pembayaran = 4 then 'Piutang'\n" +
                 "\t\tend as namaPembayaran,\n" +
                 "\t\tconcat('Kasir ',trx.nomor_kasir) as nomorKasir,\n" +
@@ -122,7 +125,7 @@ public class TransaksiDao {
                 "\tand nomor_kasir = :nomorKasir\n" +
                 "\tand shift = :shift\n" +
                 "\tAND trx.d_pgun_rekam::date BETWEEN :tanggalAwal AND :tanggalAkhir\n" +
-                "\t) as rekapTransaksi order by nourut asc, kodeTransaksi asc";
+                "\t) as rekapTransaksi order by nourut asc, id desc";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idStore", idStore);
         map.addValue("nomorKasir", nomorKasir);
