@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/findByUsername/{username}")
-    public ResponseEntity<?> findById(@PathVariable String username){
+    public ResponseEntity<?> findByUsernameg(@PathVariable String username){
         Optional<UserDto.UserLogin> data = service.findByUsername(username);
         if (!data.isPresent()) {
             return ResponseEntity.noContent().build();
