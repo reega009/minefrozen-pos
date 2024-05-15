@@ -27,7 +27,7 @@ public class ProdukService {
     @Autowired
     private ServerDao serverDao;
 
-    public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode){
+    public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(String barcode){
         Optional<ProdukDto.ProdukKasir> dataProduk = dao.findProdukByBarcode(barcode);
 
         Optional<DiskonProdukDto.DiskonProduk> disc = diskonDao.findCheckDisc(dataProduk.get().getId());

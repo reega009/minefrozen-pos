@@ -25,7 +25,7 @@ public class ProdukDao {
     @Qualifier("serverJdbc")
     private NamedParameterJdbcTemplate jdbcTemplateServer;
 
-    public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(BigInteger barcode){
+    public Optional<ProdukDto.ProdukKasir> findProdukByBarcode(String barcode){
         String query = "select\n" +
                 "\tt.i_id as id,\n" +
                 "\tt.kode_product as kodeProduct,\n" +

@@ -21,7 +21,8 @@ public class ProdukController {
     private ProdukService service;
 
     @GetMapping("/findProdukByBarcode")
-    public ResponseEntity<?> findProdukByBarcode(@RequestParam BigInteger barcode){
+    public ResponseEntity<?> findProdukByBarcode(@RequestParam String barcode){
+        System.out.println("-----------BARCODE -----------" + barcode);
         Optional<ProdukDto.ProdukKasir> data = service.findProdukByBarcode(barcode);
         if (!data.isPresent()) {
             return ResponseEntity.noContent().build();
