@@ -29,7 +29,7 @@ public class ReturnController {
 
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll(@RequestParam Integer idStore){
-        List<ReturnDto.Return> data = service.findAllReturn(idStore);
+        List<ReturnDto.FindAllReturn> data = service.findAllReturn(idStore);
         return ResponseEntity.ok(data);
     }
 

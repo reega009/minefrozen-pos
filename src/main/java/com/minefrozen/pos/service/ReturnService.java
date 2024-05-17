@@ -24,7 +24,7 @@ public class ReturnService {
     @Autowired
     private PosToServerService serverService;
 
-    public List<ReturnDto.Return> findAllReturn(Integer idStore){
+    public List<ReturnDto.FindAllReturn> findAllReturn(Integer idStore){
         return dao.findAllReturn(idStore);
     }
 

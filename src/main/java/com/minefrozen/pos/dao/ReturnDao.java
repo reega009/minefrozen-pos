@@ -27,43 +27,47 @@ public class ReturnDao {
     @Qualifier("serverJdbc")
     private NamedParameterJdbcTemplate jdbcTemplateServer;
 
-    public List<ReturnDto.Return> findAllReturn(Integer idStore){
+    public List<ReturnDto.FindAllReturn> findAllReturn(Integer idStore){
         String query = "select\n" +
-                "\ti_id as id,\n" +
-                "\tid_store as idStore,\n" +
-                "\tid_transaksi as idTransaksi,\n" +
-                "\tid_produk as idProduk,\n" +
+                "\ttr.i_id as id,\n" +
+                "\ttrx.kode_transaksi as kodeTransaksi,\n" +
+                "\ttprd.nama_product as namaProduk,\n" +
                 "\texpired_date::date as expiredDate,\n" +
-                "\tharga_jual as hargaJual,\n" +
+                "\ttr.harga_jual as hargaJual,\n" +
                 "\tdisc_produk as discProduk,\n" +
                 "\tqty,\n" +
-                "\ti_pgun_rekam as iPgunRekam,\n" +
-                "\td_pgun_rekam as dPgunRekam,\n" +
-                "\ttotal_return as totalReturn\n" +
+                "\ttuser.username as namaUser,\n" +
+                "\tto_char(tr.d_pgun_rekam,'dd-MM-yyyy hh:mm:ss') as tanggalReturn,\n" +
+                "\ttr.total_return as totalReturn\n" +
                 "from\n" +
-                "\ttmreturn t\n" +
+                "\ttmreturn tr\n" +
+                "\tleft join tmtransaksi trx on tr.id_transaksi = trx.i_id\n" +
+                "\tleft join trproduct tprd on tprd.i_id = tr.id_produk\n" +
+                "\tleft join truser tuser on tuser.id = tr.i_pgun_rekam\n" +
                 "where\n" +
-                "\tid_store = :idStore";
+                "\ttr.id_store = :idStore\n" +
+                "order by tr.i_id desc";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idStore",idStore);
-        return jdbcTemplate.query(query, map, new BeanPropertyRowMapper<>(ReturnDto.Return.class));
+        return jdbcTemplate.query(query, map, new BeanPropertyRowMapper<>(ReturnDto.FindAllReturn.class));
     }
 
     public List<ReturnDto.FindTransaksiReturn> findTransaksiReturn(String kodeTransaksi, Integer idStore){
         String query = "select\n" +
                 "\tt.i_id as idTransaksi,\n" +
-                "\tt.id_store as idStore,\n" +
-                "\tt.disc_member as discMember,\n" +
-                "\ttrinci.id_produk as idProduk,\n" +
-                "\ttrinci.expired_date as expiredDate,\n" +
-                "\ttrinci.harga_jual as hargaJual,\n" +
-                "\ttrinci.disc_produk as discProduk,\n" +
-                "\ttrinci.qty as qty,\n" +
                 "\tt.kode_transaksi as kodeTransaksi,\n" +
+                "\ttrinci.id_produk as idProduk,\n" +
+                "\ttprd.nama_product as namaProduk,\n" +
+                "\ttrinci.qty as qty,\n" +
+                "\ttrinci.harga_jual as hargaJual,\n" +
+                "\tcoalesce(t.disc_member,0) as discMember,\n" +
+                "\tcoalesce(trinci.disc_produk,0) as discProduk,\n" +
+                "\tt.id_store as idStore,\n" +
                 "\tto_char(t.d_pgun_rekam, 'DD-MM-YYYY HH24:MI:SS') as tanggalTransaksi \n" +
                 "from\n" +
                 "\ttmtransaksi t\n" +
                 "\tleft join tmtransaksirinci trinci on t.i_id = trinci.id_transaksi\n" +
+                "\tleft join trproduct tprd on trinci.id_produk = tprd.i_id\n" +
                 "where\n" +
                 "\tkode_transaksi = :kodeTransaksi\n" +
                 "\tand t.id_store = :idStore";
@@ -79,7 +83,6 @@ public class ReturnDao {
                 "(i_id,\n" +
                 "\tid_transaksi,\n" +
                 "\tid_produk,\n" +
-                "\texpired_date,\n" +
                 "\tharga_jual,\n" +
                 "\tdisc_produk,\n" +
                 "\tid_store,\n" +
@@ -91,7 +94,6 @@ public class ReturnDao {
                 ":id,\n" +
                 ":idTransaksi,\n" +
                 ":idProduk,\n" +
-                ":expiredDate,\n" +
                 ":hargaJual,\n" +
                 ":discProduk,\n" +
                 ":idStore,\n" +
@@ -103,7 +105,6 @@ public class ReturnDao {
         map.addValue("id", data.getId());
         map.addValue("idTransaksi", data.getIdTransaksi());
         map.addValue("idProduk", data.getIdProduk());
-        map.addValue("expiredDate", data.getExpiredDate());
         map.addValue("hargaJual", data.getHargaJual());
         map.addValue("discProduk", data.getDiscProduk());
         map.addValue("idStore", data.getIdStore());
@@ -256,7 +257,6 @@ public class ReturnDao {
                 "(i_id,\n" +
                 "\tid_transaksi,\n" +
                 "\tid_produk,\n" +
-                "\texpired_date,\n" +
                 "\tharga_jual,\n" +
                 "\tdisc_produk,\n" +
                 "\tid_store,\n" +
@@ -268,7 +268,6 @@ public class ReturnDao {
                 ":id,\n" +
                 ":idTransaksi,\n" +
                 ":idProduk,\n" +
-                ":expiredDate,\n" +
                 ":hargaJual,\n" +
                 ":discProduk,\n" +
                 ":idStore,\n" +
@@ -280,7 +279,6 @@ public class ReturnDao {
         map.addValue("id", data.getId());
         map.addValue("idTransaksi", data.getIdTransaksi());
         map.addValue("idProduk", data.getIdProduk());
-        map.addValue("expiredDate", data.getExpiredDate());
         map.addValue("hargaJual", data.getHargaJual());
         map.addValue("discProduk", data.getDiscProduk());
         map.addValue("idStore", data.getIdStore());

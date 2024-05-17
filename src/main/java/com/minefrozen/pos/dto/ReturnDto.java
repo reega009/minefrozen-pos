@@ -14,6 +14,22 @@ public class ReturnDto {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class FindAllReturn{
+        private Integer id;
+        private String kodeTransaksi;
+        private String namaProduk;
+        private Date expiredDate;
+        private BigDecimal hargaJual;
+        private BigDecimal discProduk;
+        private Integer qty;
+        private String namaUser;
+        private String tanggalReturn;
+        private BigDecimal totalReturn;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Return{
         private Integer id;
         private Integer idStore;
@@ -33,14 +49,14 @@ public class ReturnDto {
     @NoArgsConstructor
     public static class FindTransaksiReturn{
         private Integer idTransaksi;
-        private Integer idStore;
-        private BigDecimal discMember;
-        private Integer idProduk;
-        private Date expiredDate;
-        private BigDecimal hargaJual;
-        private BigDecimal discProduk;
-        private Integer qty;
         private String kodeTransaksi;
+        private Integer idProduk;
+        private String namaProduk;
+        private Integer qty;
+        private BigDecimal hargaJual;
+        private BigDecimal discMember;
+        private BigDecimal discProduk;
+        private Integer idStore;
         private String tanggalTransaksi;
     }
 
