@@ -35,7 +35,9 @@ public class MemberService {
     @Transactional("posTransaction")
     public void save(MemberDto.Member data){
         Integer newId = nomaxDao.findNoMax("tmmember");
+        String newKode = String.format("MBR-%06d", newId);
         data.setId(newId);
+        data.setKodeMember(newKode);
         dao.save(data);
         nomaxDao.updateTrNomax("tmmember");
     }
