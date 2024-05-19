@@ -25,6 +25,7 @@ public class ReturnDto {
         private String namaUser;
         private String tanggalReturn;
         private BigDecimal totalReturn;
+        private Integer nomorKasir;
     }
 
     @Data
