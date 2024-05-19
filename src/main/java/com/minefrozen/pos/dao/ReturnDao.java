@@ -265,6 +265,7 @@ public class ReturnDao {
                 "\ti_pgun_rekam,\n" +
                 "\td_pgun_rekam,\n" +
                 "\ttotal_return,\n" +
+                "\tnomor_kasir,\n" +
                 "\tqty)\n" +
                 "values(\n" +
                 ":id,\n" +
@@ -276,6 +277,7 @@ public class ReturnDao {
                 ":iPgunRekam,\n" +
                 "CURRENT_TIMESTAMP,\n" +
                 ":totalReturn,\n" +
+                ":nomorKasir,\n" +
                 ":qty)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", data.getId());
@@ -287,6 +289,7 @@ public class ReturnDao {
         map.addValue("iPgunRekam", data.getIPgunRekam());
         map.addValue("qty", data.getQty());
         map.addValue("totalReturn", data.getTotalReturn());
+        map.addValue("nomorKasir", data.getNomorKasir());
         jdbcTemplateServer.update(query,map);
     }
 
