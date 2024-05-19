@@ -39,6 +39,7 @@ public class ReturnDto {
         private BigDecimal hargaJual;
         private BigDecimal discProduk;
         private Integer qty;
+        private Integer nomorKasir;
         private Integer iPgunRekam;
         private Timestamp dPgunRekam;
         private BigDecimal totalReturn;

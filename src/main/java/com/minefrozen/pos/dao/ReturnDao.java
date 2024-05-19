@@ -32,7 +32,6 @@ public class ReturnDao {
                 "\ttr.i_id as id,\n" +
                 "\ttrx.kode_transaksi as kodeTransaksi,\n" +
                 "\ttprd.nama_product as namaProduk,\n" +
-                "\texpired_date::date as expiredDate,\n" +
                 "\ttr.harga_jual as hargaJual,\n" +
                 "\tdisc_produk as discProduk,\n" +
                 "\tqty,\n" +
@@ -89,6 +88,7 @@ public class ReturnDao {
                 "\ti_pgun_rekam,\n" +
                 "\td_pgun_rekam,\n" +
                 "\ttotal_return,\n" +
+                "\tnomor_kasir,\n" +
                 "\tqty)\n" +
                 "values(\n" +
                 ":id,\n" +
@@ -99,6 +99,7 @@ public class ReturnDao {
                 ":idStore,\n" +
                 ":iPgunRekam,\n" +
                 "CURRENT_TIMESTAMP,\n" +
+                ":nomorKasir,\n" +
                 ":totalReturn,\n" +
                 ":qty)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
@@ -109,6 +110,7 @@ public class ReturnDao {
         map.addValue("discProduk", data.getDiscProduk());
         map.addValue("idStore", data.getIdStore());
         map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("nomorKasir", data.getNomorKasir());
         map.addValue("qty", data.getQty());
         map.addValue("totalReturn", data.getTotalReturn());
         jdbcTemplate.update(query,map);
