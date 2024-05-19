@@ -37,6 +37,7 @@ public class ReturnDao {
                 "\tqty,\n" +
                 "\ttuser.username as namaUser,\n" +
                 "\tto_char(tr.d_pgun_rekam,'dd-MM-yyyy hh:mm:ss') as tanggalReturn,\n" +
+                "\ttr.nomor_kasir as nomorKasir,\n" +
                 "\ttr.total_return as totalReturn\n" +
                 "from\n" +
                 "\ttmreturn tr\n" +
