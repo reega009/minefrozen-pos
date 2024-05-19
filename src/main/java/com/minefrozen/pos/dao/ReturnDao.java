@@ -99,8 +99,8 @@ public class ReturnDao {
                 ":idStore,\n" +
                 ":iPgunRekam,\n" +
                 "CURRENT_TIMESTAMP,\n" +
-                ":nomorKasir,\n" +
                 ":totalReturn,\n" +
+                ":nomorKasir,\n" +
                 ":qty)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", data.getId());
