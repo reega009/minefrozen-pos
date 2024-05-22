@@ -39,7 +39,7 @@ public class ProdukDto {
         private Integer id;
         private String kodeProduct;
         private String namaProduct;
-        private BigInteger barcode;
+        private String barcode;
         private Integer idSupplier;
         private Integer idCategory;
         private Integer berat;
