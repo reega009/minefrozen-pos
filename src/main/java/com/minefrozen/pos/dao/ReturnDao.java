@@ -184,7 +184,7 @@ public class ReturnDao {
 
     // SERVER
     public Optional<Integer> findExistsTransaksiServer(Integer idTransaksi, Integer idStore){
-        String query = "select\n" +
+        String query = "select distinct\n" +
                 "\t1\n" +
                 "from\n" +
                 "\ttmtransaksi t\n" +
