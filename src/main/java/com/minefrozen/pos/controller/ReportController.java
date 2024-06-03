@@ -1,11 +1,13 @@
 package com.minefrozen.pos.controller;
 
 
+import com.minefrozen.pos.dto.ReportDto;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +24,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -72,6 +75,42 @@ public class ReportController {
 
             response.setContentType("application/x-pdf");
             response.setHeader("Content-disposition", "inline; filename=" + "Struk-Belanja" + ".pdf");
+
+            log.info("JASPER PRINT SUCCESS");
+
+            final OutputStream outStream = response.getOutputStream();
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.info("GAGAL CETAK PDF");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @PostMapping(value = "/laporan-pendapatan", headers = "Accept=*/*", produces = MediaType.APPLICATION_PDF_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> laporanPendapatan(
+            @RequestBody List<ReportDto.LaporanPendapatan> listLabel,
+            HttpServletResponse response,
+            HttpServletRequest request) throws IOException, JRException, SQLException {
+
+
+        Map<String, Object> params = new HashMap<>();
+
+        try {
+
+            InputStream jasperStream = this.getClass().getResourceAsStream("/file/jasper/Laporan_Pendapatan_Kasir.jasper");
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listLabel);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, dataSource);
+
+            response.setContentType("application/x-pdf");
+            response.setHeader("Content-disposition", "inline; filename=" + "Laporan_Pendapatan_Kasir" + ".pdf");
 
             log.info("JASPER PRINT SUCCESS");
 
