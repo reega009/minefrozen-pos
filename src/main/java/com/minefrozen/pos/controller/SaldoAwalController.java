@@ -6,7 +6,10 @@ import com.minefrozen.pos.dto.SaldoAwalDto;
 import com.minefrozen.pos.dto.UserDto;
 import com.minefrozen.pos.service.SaldoAwalService;
 import com.minefrozen.pos.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,7 +20,8 @@ import java.util.Date;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api-pos/saldo-awal")
+@RequestMapping("/api-pos/modal-awal")
+@Slf4j
 public class SaldoAwalController {
 
     @Autowired
@@ -27,7 +31,7 @@ public class SaldoAwalController {
     private UserService userService;
 
     @GetMapping("/findByTanggalSekarang")
-    public ResponseEntity<?> findById(@RequestParam Integer nomorKasir, @RequestParam Integer idStore, @RequestParam Date tanggalSekarang){
+    public ResponseEntity<?> findById(@RequestParam Integer nomorKasir, @RequestParam Integer idStore, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date tanggalSekarang){
         Optional<SaldoAwalDto.SaldoAwal> data = service.findByTanggalSekarang(nomorKasir, idStore, tanggalSekarang);
         if (!data.isPresent()) {
             return ResponseEntity.noContent().build();

@@ -13,6 +13,7 @@ public class ReportDto {
     @NoArgsConstructor
     public static class LaporanPendapatan{
         private String kassa;
+        private String namakasir;
         private String tanggal;
         private BigDecimal saldoawal;
         private BigDecimal cash;
