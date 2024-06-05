@@ -13,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api-pos/auth")
 @Slf4j
@@ -43,11 +45,13 @@ public class AuthenticationController {
             // Token
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword()));
             String email = authentication.getName();
-            String role = authentication.getAuthorities().toString();
-            log.info("AUTH DETAIL : {}", role);
+
+            Optional<UserDto.UserLogin> userDetail =  userService.findByUsername(email);
+            String role = userDetail.get().getRole();
+
             UserDto.UserLogin user = new UserDto.UserLogin(1,email,"","", 1);
             String token = jwtUtil.createToken(user);
-            UserDto.LoginRes loginRes = new UserDto.LoginRes(email,token);
+            UserDto.LoginRes loginRes = new UserDto.LoginRes(email,token, role);
             return ResponseEntity.ok(loginRes);
         }catch (BadCredentialsException e){
             UserDto.ErrorRes errorResponse = new UserDto.ErrorRes(HttpStatus.BAD_REQUEST,"Invalid username or password");

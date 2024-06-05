@@ -23,6 +23,7 @@ public class UserDto {
     public static class LoginRes {
         private String username;
         private String token;
+        private String role;
     }
 
     @Data

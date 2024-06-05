@@ -91,6 +91,11 @@ public class TransaksiDao {
                 "\t\t\t\t\twhen trx.jenis_debit = 2 then 'Credit Mandiri'\n" +
                 "\t\t\t\tend\n" +
                 "\t\t\twhen trx.jenis_pembayaran = 4 then 'Piutang'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 5 then \n" +
+                "\t\t\t\tcase \n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 1 then 'QRIS BCA'\n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 2 then 'QRIS Mandiri'\n" +
+                "\t\t\t\tend\n" +
                 "\t\tend as namaPembayaran,\n" +
                 "\t\tconcat('Kasir ',trx.nomor_kasir) as nomorKasir,\n" +
                 "\t\tconcat('Shift ',trx.shift) as shift,\n" +
@@ -143,10 +148,18 @@ public class TransaksiDao {
                 "\t\t\t\tcase \n" +
                 "\t\t\t\t\twhen trx.jenis_debit = 1 then 'Debit BCA'\n" +
                 "\t\t\t\t\twhen trx.jenis_debit = 2 then 'Debit Mandiri'\n" +
-                "\t\t\t\t\twhen trx.jenis_debit = 3 then 'QRIS'\n" +
                 "\t\t\t\tend\n" +
-                "\t\t\twhen trx.jenis_pembayaran = 3 then 'Credit'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 3 then \n" +
+                "\t\t\t\tcase \n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 1 then 'Credit BCA'\n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 2 then 'Credit Mandiri'\n" +
+                "\t\t\t\tend\n" +
                 "\t\t\twhen trx.jenis_pembayaran = 4 then 'Piutang'\n" +
+                "\t\t\twhen trx.jenis_pembayaran = 5 then \n" +
+                "\t\t\t\tcase \n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 1 then 'QRIS BCA'\n" +
+                "\t\t\t\t\twhen trx.jenis_debit = 2 then 'QRIS Mandiri'\n" +
+                "\t\t\t\tend\n" +
                 "\tend as jenisPembayaran,\n" +
                 "\ttprd.kode_product as kodeProduk,\n" +
                 "\ttprd.nama_product as namaProduk,\n" +

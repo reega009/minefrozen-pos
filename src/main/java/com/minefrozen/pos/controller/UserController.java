@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api-pos/user")
 public class UserController {
 
 

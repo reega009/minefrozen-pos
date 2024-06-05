@@ -32,7 +32,7 @@ public class UserService {
         return dao.findById(id);
     }
 
-    @Transactional
+    @Transactional("posTransaction")
     public void save(UserDto.User data){
         // Get Nomax
         Integer newId = noMaxDao.findNoMax("truser");
@@ -42,6 +42,7 @@ public class UserService {
         noMaxDao.updateTrNomax("truser");
     }
 
+    @Transactional("posTransaction")
     public void update(UserDto.User data){
         dao.update(data);
     }

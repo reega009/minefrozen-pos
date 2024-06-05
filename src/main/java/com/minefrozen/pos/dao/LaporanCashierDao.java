@@ -27,7 +27,7 @@ public class LaporanCashierDao {
                 "    sum(credit) as credit,\n" +
                 "    sum(piutang) as piutang,\n" +
                 "    sum(return) as returns,\n" +
-                "    sum(cash + debit + credit + piutang + return) as total\n" +
+                "    sum(cash + debit + credit + piutang - return) as total\n" +
                 "FROM (\n" +
                 "\t    SELECT\n" +
                 "\t        d_pgun_rekam::date as tanggal,\n" +
@@ -57,7 +57,7 @@ public class LaporanCashierDao {
                 "\t        LEFT JOIN tmtransaksirinci trxrinci ON trx.id_store  = trxrinci.id_transaksi\n" +
                 "\t    WHERE\n" +
                 "\t        d_pgun_rekam::date BETWEEN :tanggalAwal AND :tanggalAkhir\n" +
-                "\t        AND jenis_pembayaran = 2\n" +
+                "\t        AND jenis_pembayaran IN (2,5)\n" +
                 "\t        and trx.id_store = :idStore\n" +
                 "\t    GROUP BY d_pgun_rekam\n" +
                 "    union all\n" +
@@ -92,6 +92,22 @@ public class LaporanCashierDao {
                 "\t\t\tand jenis_pembayaran = 4\n" +
                 "\t        and trx.id_store = :idStore\n" +
                 "\t\tgroup by d_pgun_rekam\n" +
+                "\tunion all\n" +
+                "\t\tselect\n" +
+                "\t\t\ttrx.d_pgun_rekam::date as tanggal,\n" +
+                "\t\t\t0 as cash,\n" +
+                "\t\t\t0 as debit,\n" +
+                "\t\t\t0 as credit,\n" +
+                "\t\t\t0 as piutang,\n" +
+                "\t\t\tsum(tr.total_return) as return\n" +
+                "\t\tfrom \n" +
+                "\t\t\t\t\ttmtransaksi trx\n" +
+                "\t\tinner join tmreturn tr on tr.id_transaksi = trx.i_id\n" +
+                "\t\twhere\n" +
+                "\t\t\t\t\ttrx.d_pgun_rekam::date between :tanggalAwal and :tanggalAkhir\n" +
+                "\t\t\tand trx.id_store = :idStore\n" +
+                "\t\tgroup by\n" +
+                "\t\t\ttrx.d_pgun_rekam::date, tr.total_return\n" +
                 ") AS rekapSalesCashier\n" +
                 "GROUP BY tanggal\n" +
                 "ORDER BY tanggal";
