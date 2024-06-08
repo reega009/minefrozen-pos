@@ -21,7 +21,7 @@ public class ReturnDto {
         private Date expiredDate;
         private BigDecimal hargaJual;
         private BigDecimal discProduk;
-        private Integer qty;
+        private BigDecimal qty;
         private String namaUser;
         private String tanggalReturn;
         private BigDecimal totalReturn;
@@ -39,7 +39,7 @@ public class ReturnDto {
         private Date expiredDate;
         private BigDecimal hargaJual;
         private BigDecimal discProduk;
-        private Integer qty;
+        private BigDecimal qty;
         private Integer nomorKasir;
         private Integer iPgunRekam;
         private Timestamp dPgunRekam;
@@ -54,7 +54,7 @@ public class ReturnDto {
         private String kodeTransaksi;
         private Integer idProduk;
         private String namaProduk;
-        private Integer qty;
+        private BigDecimal qty;
         private BigDecimal hargaJual;
         private BigDecimal discMember;
         private BigDecimal discProduk;
@@ -69,7 +69,7 @@ public class ReturnDto {
         private Integer id;
         private Integer idProduk;
         private Integer idStore;
-        private Integer qty;
+        private BigDecimal qty;
         private Date expiredDate;
         private Integer iPgunRekam;
         private Date dPgunRekam;

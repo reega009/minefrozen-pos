@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public class ReturnService {
                 noMaxDao.updateTrNomax("tmreturn");
 
                 // Check QTY Trx RINCI
-                Optional<Integer> qtyRinci = dao.findTransaksiRinciForCheckQty(data.getIdProduk(), data.getIdTransaksi());
+                Optional<BigDecimal> qtyRinci = dao.findTransaksiRinciForCheckQty(data.getIdProduk(), data.getIdTransaksi());
                 if(qtyRinci.get() == data.getQty()){
                     // Delete Transaksi rinci
                     dao.deleteTransaksiRinci(data.getIdTransaksi(),data.getIdProduk(),data.getIdStore());

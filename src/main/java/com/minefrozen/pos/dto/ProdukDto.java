@@ -21,7 +21,7 @@ public class ProdukDto {
         private BigDecimal hargaJual;
         private Integer berat;
         private String barcode;
-        private Integer qtyInven;
+        private BigDecimal qtyInven;
         private Boolean isDiskon;
         private String jenisDiskon;
         //        Jenis Disc

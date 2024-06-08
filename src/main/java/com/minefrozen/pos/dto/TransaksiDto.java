@@ -39,7 +39,7 @@ public class TransaksiDto {
         private Integer idTransaksi;
         private Integer idStore;
         private Integer idProduk;
-        private Integer qty;
+        private BigDecimal qty;
         private BigDecimal hargaJual;
         private Integer discProduk;
         private BigDecimal totalHargaPerProduk;
@@ -74,7 +74,7 @@ public class TransaksiDto {
         private String namaProduk;
         private BigDecimal hargaJual;
         private BigDecimal discProduk;
-        private Integer qty;
+        private BigDecimal qty;
         private BigDecimal totalHargaPerProduk;
         //
         private String kodeTransaksi;
@@ -92,7 +92,7 @@ public class TransaksiDto {
     @NoArgsConstructor
     public static class ListSubstractInventory{
         private Integer idInventory;
-        private Integer qty;
+        private BigDecimal qty;
         private Integer idProduk;
         private Date expiredDate;
     }

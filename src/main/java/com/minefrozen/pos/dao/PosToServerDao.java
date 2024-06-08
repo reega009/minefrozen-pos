@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -181,7 +182,7 @@ public class PosToServerDao {
         return jdbcTemplateServer.query(query, map, new BeanPropertyRowMapper<>(TransaksiDto.ListSubstractInventory.class));
     }
 
-    public void updateQtyInvenServer(Integer idStore, Integer idProduk, Date expiredDate, Integer qtyBeli){
+    public void updateQtyInvenServer(Integer idStore, Integer idProduk, Date expiredDate, BigDecimal qtyBeli){
         String query = "update \n" +
                 "\ttminventory \n" +
                 "set\n" +

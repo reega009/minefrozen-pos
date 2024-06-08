@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -54,17 +55,17 @@ public class PosToServerService {
                 dao.tambahTransaksiRinciServer(rinci);
 
                 // Update Invent Server Or Delete Invent Server
-                Integer remainingQuantity = rinci.getQty(); // 1
+                BigDecimal remainingQuantity = rinci.getQty(); // 1
 
                 List<TransaksiDto.ListSubstractInventory> listSubstractInventories = dao.listSubstractInventory(rinci.getIdProduk(), rinci.getIdStore()); // 20
                 for (TransaksiDto.ListSubstractInventory listSubstract : listSubstractInventories){
                     log.info("Remaining Quantity: %d", remainingQuantity);
-                    if(remainingQuantity <= 0){
+                    if(remainingQuantity.compareTo(BigDecimal.ZERO) <= 0){
                         break;
                     }
 
-                    Integer subtractedQuantity = remainingQuantity - listSubstract.getQty() ; // 1 - 20 = -19
-                    if(subtractedQuantity >= 0){
+                    BigDecimal subtractedQuantity = remainingQuantity.subtract(listSubstract.getQty()) ; // 1 - 20 = -19
+                    if(subtractedQuantity.compareTo(BigDecimal.ZERO) >= 0){
                         dao.deleteInvenServer(listSubstract.getIdInventory(), rinci.getIdStore(), listSubstract.getExpiredDate());
                         remainingQuantity = subtractedQuantity;
                         log.info("Delete ITEM {}", listSubstract);
@@ -126,17 +127,17 @@ public class PosToServerService {
                     dao.tambahTransaksiRinciServer(rinci);
 
                     // Update Invent Server Or Delete Invent Server
-                    Integer remainingQuantity = rinci.getQty(); // 20
+                    BigDecimal remainingQuantity = rinci.getQty(); // 20
 
                     List<TransaksiDto.ListSubstractInventory> listSubstractInventories = dao.listSubstractInventory(rinci.getIdProduk(), rinci.getIdStore()); // 30
                     for (TransaksiDto.ListSubstractInventory listSubstract : listSubstractInventories){
                         log.info("Remaining Quantity: %d", remainingQuantity);
-                        if(remainingQuantity <= 0){
+                        if(remainingQuantity.compareTo(BigDecimal.ZERO) <= 0){
                             break;
                         }
 
-                        Integer subtractedQuantity = remainingQuantity - listSubstract.getQty() ; // 20 - 30 = -10
-                        if(subtractedQuantity >= 0){
+                        BigDecimal subtractedQuantity = remainingQuantity.subtract(listSubstract.getQty()) ; // 20 - 30 = -10
+                        if(subtractedQuantity.compareTo(BigDecimal.ZERO) >= 0){
                             dao.deleteInvenServer(listSubstract.getIdInventory(), rinci.getIdStore(), listSubstract.getExpiredDate());
                             remainingQuantity = subtractedQuantity;
                             log.info("Delete ITEM {}", listSubstract);
@@ -164,7 +165,7 @@ public class PosToServerService {
     @Transactional("serverTransaction")
     public void returnToServer(ReturnDto.Return data)throws Exception{
         // Check QTY Rinci POS
-        Optional<Integer> qtyRinci = returnDao.findTransaksiRinciForCheckQty(data.getIdProduk(), data.getIdTransaksi());
+        Optional<BigDecimal> qtyRinci = returnDao.findTransaksiRinciForCheckQty(data.getIdProduk(), data.getIdTransaksi());
 
         // Update Total Harga Transaksi Server / Backup
         Optional<Integer> checkExists = returnDao.findExistsTransaksiServer(data.getIdTransaksi(), data.getIdStore());

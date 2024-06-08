@@ -118,13 +118,13 @@ public class ReturnDao {
     }
 
     // Check QTY Transaksi Rinci
-    public Optional<Integer> findTransaksiRinciForCheckQty(Integer idProduk, Integer idTransaksi){
+    public Optional<BigDecimal> findTransaksiRinciForCheckQty(Integer idProduk, Integer idTransaksi){
         String query = "select qty from tmtransaksirinci where id_transaksi = :idTransaksi and id_produk = :idProduk";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idProduk", idProduk);
         map.addValue("idTransaksi", idTransaksi);
         try {
-            Integer data = jdbcTemplateServer.queryForObject(query, map, Integer.class);
+            BigDecimal data = jdbcTemplateServer.queryForObject(query, map, BigDecimal.class);
             if(data != null){
                 return Optional.of(data);
             }else{
@@ -150,7 +150,7 @@ public class ReturnDao {
         jdbcTemplate.update(query,map);
     }
 
-    public void updateQtyTransaksiRinci(Integer qtyReturn, BigDecimal totalReturn, Integer idTransaksi, Integer idProduk){
+    public void updateQtyTransaksiRinci(BigDecimal qtyReturn, BigDecimal totalReturn, Integer idTransaksi, Integer idProduk){
         String query = "update\n" +
                 "\ttmtransaksirinci\n" +
                 "set\n" +
@@ -222,7 +222,7 @@ public class ReturnDao {
         jdbcTemplateServer.update(query,map);
     }
 
-    public void updateQtyTransaksiRinciServer(Integer qtyReturn, BigDecimal totalReturn, Integer idTransaksi, Integer idProduk){
+    public void updateQtyTransaksiRinciServer(BigDecimal qtyReturn, BigDecimal totalReturn, Integer idTransaksi, Integer idProduk){
         String query = "update\n" +
                 "\ttmtransaksirinci\n" +
                 "set\n" +
@@ -312,7 +312,7 @@ public class ReturnDao {
         }
     }
 
-    public void updateQtyInven(Integer id, Integer newQty){
+    public void updateQtyInven(Integer id, BigDecimal newQty){
         String query = "update tminventory set qty = (select qty + :newQty from tminventory where i_id = :id) where i_id = :id";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("newQty", newQty);

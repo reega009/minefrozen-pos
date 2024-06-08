@@ -40,7 +40,7 @@ public class DiskonProdukDto {
     public static class ParamCheckDiskon{
         private Integer idStore;
         private Integer idProduk;
-        private Integer qtyBeli;
+        private BigDecimal qtyBeli;
     }
 
 }

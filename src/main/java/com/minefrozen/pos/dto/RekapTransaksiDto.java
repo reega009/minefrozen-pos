@@ -31,7 +31,7 @@ public class RekapTransaksiDto {
         private String namaProduk;
         private BigDecimal hargaJual;
         private BigDecimal discProduk;
-        private Integer qty;
+        private BigDecimal qty;
         private BigDecimal totalHargaPerProduk;
         //
         private String kodeTransaksi;
