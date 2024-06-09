@@ -49,14 +49,15 @@ public class PosToServerDao {
 
     public void tambahTransaksiRinciBackup(TransaksiDto.TambahTransaksiRinci rinci){
         String query = "INSERT INTO tmtransaksirincibackup\n" +
-                "(id_transaksi, id_produk, id_store, qty, harga_jual, disc_produk, total_per_produk)\n" +
-                "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :discProduk, :totalHargaPerProduk)";
+                "(id_transaksi, id_produk, id_store, qty, harga_jual, harga_beli, disc_produk, total_per_produk)\n" +
+                "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :hargaBeli, :discProduk, :totalHargaPerProduk)";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi", rinci.getIdTransaksi());
         map.addValue("idStore", rinci.getIdStore());
         map.addValue("idProduk", rinci.getIdProduk());
         map.addValue("qty", rinci.getQty());
         map.addValue("hargaJual", rinci.getHargaJual());
+        map.addValue("hargaBeli", rinci.getHargaBeli());
         map.addValue("discProduk", rinci.getDiscProduk());
         map.addValue("totalHargaPerProduk", rinci.getTotalHargaPerProduk());
         jdbcTemplatePos.update(query, map);
@@ -88,6 +89,7 @@ public class PosToServerDao {
                 "id_store as idStore,\n" +
                 "qty,\n" +
                 "harga_jual as hargaJual,\n" +
+                "harga_beli as hargaBeli,\n" +
                 "disc_produk as discProduk,\n" +
                 "total_per_produk as totalHargaPerProduk\n" +
                 "FROM tmtransaksirincibackup\n" +
@@ -135,14 +137,15 @@ public class PosToServerDao {
 
     public void tambahTransaksiRinciServer(TransaksiDto.TambahTransaksiRinci rinci){
         String query = "INSERT INTO tmtransaksirinci\n" +
-                "(id_transaksi, id_produk, id_store, qty, harga_jual, disc_produk, total_per_produk)\n" +
-                "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :discProduk, :totalHargaPerProduk)";
+                "(id_transaksi, id_produk, id_store, qty, harga_jual, harga_beli, disc_produk, total_per_produk)\n" +
+                "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :hargaBeli, :discProduk, :totalHargaPerProduk)";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi", rinci.getIdTransaksi());
         map.addValue("idProduk", rinci.getIdProduk());
         map.addValue("idStore", rinci.getIdStore());
         map.addValue("qty", rinci.getQty());
         map.addValue("hargaJual", rinci.getHargaJual());
+        map.addValue("hargaBeli", rinci.getHargaBeli());
         map.addValue("discProduk", rinci.getDiscProduk());
         map.addValue("totalHargaPerProduk", rinci.getTotalHargaPerProduk());
         jdbcTemplateServer.update(query, map);

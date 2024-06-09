@@ -40,6 +40,7 @@ public class TransaksiDto {
         private Integer idStore;
         private Integer idProduk;
         private BigDecimal qty;
+        private BigDecimal hargaBeli;
         private BigDecimal hargaJual;
         private Integer discProduk;
         private BigDecimal totalHargaPerProduk;

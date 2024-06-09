@@ -42,14 +42,15 @@ public class TransaksiDao {
 
     public void tambahTransaksiRinci(TransaksiDto.TambahTransaksiRinci rinci){
         String query = "INSERT INTO tmtransaksirinci\n" +
-                "(id_transaksi, id_produk, id_store, qty, harga_jual, disc_produk, total_per_produk)\n" +
-                "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :discProduk, :totalHargaPerProduk)\n";
+                "(id_transaksi, id_produk, id_store, qty, harga_jual, harga_jual, disc_produk, total_per_produk)\n" +
+                "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :hargaBeli, :discProduk, :totalHargaPerProduk)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi", rinci.getIdTransaksi());
         map.addValue("idProduk", rinci.getIdProduk());
         map.addValue("idStore", rinci.getIdStore());
         map.addValue("qty", rinci.getQty());
         map.addValue("hargaJual", rinci.getHargaJual());
+        map.addValue("hargaBeli", rinci.getHargaBeli());
         map.addValue("discProduk", rinci.getDiscProduk());
         map.addValue("totalHargaPerProduk", rinci.getTotalHargaPerProduk());
         jdbcTemplate.update(query, map);
