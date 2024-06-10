@@ -42,7 +42,7 @@ public class TransaksiDao {
 
     public void tambahTransaksiRinci(TransaksiDto.TambahTransaksiRinci rinci){
         String query = "INSERT INTO tmtransaksirinci\n" +
-                "(id_transaksi, id_produk, id_store, qty, harga_jual, harga_jual, disc_produk, total_per_produk)\n" +
+                "(id_transaksi, id_produk, id_store, qty, harga_jual, harga_beli, disc_produk, total_per_produk)\n" +
                 "VALUES(:idTransaksi, :idProduk, :idStore, :qty, :hargaJual, :hargaBeli, :discProduk, :totalHargaPerProduk)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idTransaksi", rinci.getIdTransaksi());
