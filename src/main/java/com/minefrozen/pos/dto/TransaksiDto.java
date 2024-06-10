@@ -29,6 +29,7 @@ public class TransaksiDto {
         private Date tanggalTenggatPiutang;
         private Integer nomorKartuCredit;
         private Integer jenisDebit;
+        private String namaKasir;
         private List<TambahTransaksiRinci> transaksiRinci;
     }
 
