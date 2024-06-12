@@ -141,7 +141,7 @@ public class DiskonProdukDao {
                 ":idProduk,\n" +
                 ":disc,\n" +
                 ":iPgunRekam,\n" +
-                "CURRENT_TIMESTAMP,\n" +
+                ":dPgunRekam,\n" +
                 ":tanggalAwalPeriode,\n" +
                 ":tanggalAkhirPeriode,\n" +
                 ":idProdukBonus,\n" +
@@ -153,6 +153,7 @@ public class DiskonProdukDao {
         map.addValue("idProduk", data.getIdProduk());
         map.addValue("disc", data.getDiscProduk());
         map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("dPgunRekam", data.getDPgunRekam());
         map.addValue("tanggalAwalPeriode", data.getTanggalAwalPeriode());
         map.addValue("tanggalAkhirPeriode", data.getTanggalAkhirPeriode());
         map.addValue("idProdukBonus", data.getIdProdukBonus());

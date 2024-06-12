@@ -36,6 +36,10 @@ public class SaldoAwalService {
             Integer newId = noMaxDao.findNoMax("tmreturn");
             request.setId(newId);
 
+            // Set DPgunRekam
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            request.setDPgunRekam(currentTimestamp);
+
             dao.save(request);
             dao.saveServer(request);
             noMaxDao.updateTrNomax("tmreturn");

@@ -99,7 +99,7 @@ public class ReturnDao {
                 ":discProduk,\n" +
                 ":idStore,\n" +
                 ":iPgunRekam,\n" +
-                "CURRENT_TIMESTAMP,\n" +
+                ":dPgunRekam\n,\n" +
                 ":totalReturn,\n" +
                 ":nomorKasir,\n" +
                 ":qty)\n";
@@ -111,6 +111,7 @@ public class ReturnDao {
         map.addValue("discProduk", data.getDiscProduk());
         map.addValue("idStore", data.getIdStore());
         map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("dPgunRekam", data.getDPgunRekam());
         map.addValue("nomorKasir", data.getNomorKasir());
         map.addValue("qty", data.getQty());
         map.addValue("totalReturn", data.getTotalReturn());

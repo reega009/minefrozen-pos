@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,11 @@ public class MemberService {
         String newKode = String.format("MBR-%06d", newId);
         data.setId(newId);
         data.setKodeMember(newKode);
+
+        // Set DPgunRekam
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        data.setDPgunRekam(currentTimestamp);
+
         dao.save(data);
         nomaxDao.updateTrNomax("tmmember");
     }

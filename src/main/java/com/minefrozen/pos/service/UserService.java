@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,11 @@ public class UserService {
         // Get Nomax
         Integer newId = noMaxDao.findNoMax("truser");
         data.setId(newId);
+
+        // Set DPgunRekam
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        data.setDPgunRekam(currentTimestamp);
+
         dao.save(data);
         // Update Nomax
         noMaxDao.updateTrNomax("truser");

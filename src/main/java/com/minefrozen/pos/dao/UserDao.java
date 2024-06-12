@@ -92,13 +92,14 @@ public class UserDao {
     public void save(UserDto.User data){
         String query = "INSERT INTO truser\n" +
                 "(id, username, \"password\", \"role\", i_pgun_rekam, d_pgun_rekam, user_store)\n" +
-                "VALUES(:id, :username, :password, :role, :iPgunRekam, current_timestamp, :userStore)\n";
+                "VALUES(:id, :username, :password, :role, :iPgunRekam, :dPgunRekam, :userStore)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", data.getId());
         map.addValue("username", data.getUsername());
         map.addValue("password", data.getPassword());
         map.addValue("role", data.getRole());
         map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("dPgunRekam", data.getDPgunRekam());
         map.addValue("userStore", data.getUserStore());
         jdbcTemplate.update(query,map);
     }

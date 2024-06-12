@@ -38,8 +38,8 @@ public class TransaksiService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
         String formattedDate = currentDate.format(formatter);
 
-        Instant instantNow = Instant.now();
-        LocalDateTime timeStampNow = LocalDateTime.ofInstant(instantNow, ZoneId.systemDefault());
+        // Set DPgunRekam
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 
 
         try{
@@ -57,7 +57,7 @@ public class TransaksiService {
             request.setId(newId);
             request.setKodeTransaksi(newKode);
             request.setShift(1); // SEMENTARA HARDCODE
-            request.setDPgunRekam(Timestamp.valueOf(timeStampNow));
+            request.setDPgunRekam(currentTimestamp);
             dao.tambahTransaksi(request);
 
             // Save Rinci

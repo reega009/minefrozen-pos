@@ -69,13 +69,14 @@ public class SaldoAwalDao {
                 ":nomorKasir,\n" +
                 ":idStore,\n" +
                 ":iPgunRekam,\n" +
-                "current_timestamp);\n";
+                ":dPgunRekam);\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", data.getId());
         map.addValue("modalAwal", data.getModalAwal());
         map.addValue("nomorKasir", data.getNomorKasir());
         map.addValue("idStore", data.getIdStore());
         map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("dPgunRekam", data.getDPgunRekam());
         jdbcTemplate.update(query,map);
     }
 
@@ -85,13 +86,14 @@ public class SaldoAwalDao {
                 "set\n" +
                 "\tmodal_awal =:modalAwal,\n" +
                 "\ti_pgun_rekam =:iPgunRekam,\n" +
-                "\td_pgun_rekam = current_timestamp\n" +
+                "\td_pgun_rekam = :dPgunRekam\n" +
                 "where\n" +
                 "\ti_id = :id\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", data.getId());
         map.addValue("modalAwal", data.getModalAwal());
         map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("dPgunRekam", data.getDPgunRekam());
         jdbcTemplate.update(query,map);
     }
 
@@ -110,13 +112,14 @@ public class SaldoAwalDao {
                 ":nomorKasir,\n" +
                 ":idStore,\n" +
                 ":iPgunRekam,\n" +
-                "current_timestamp);\n";
+                ":dPgunRekam);\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", data.getId());
         map.addValue("modalAwal", data.getModalAwal());
         map.addValue("nomorKasir", data.getNomorKasir());
         map.addValue("idStore", data.getIdStore());
         map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("dPgunRekam", data.getDPgunRekam());
         jdbcTemplateServer.update(query,map);
     }
 
@@ -126,13 +129,14 @@ public class SaldoAwalDao {
                 "set\n" +
                 "\tmodal_awal =:modalAwal,\n" +
                 "\ti_pgun_rekam =:iPgunRekam,\n" +
-                "\td_pgun_rekam = current_timestamp\n" +
+                "\td_pgun_rekam = :dPgunRekam\n" +
                 "where\n" +
                 "\ti_id = :id\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", data.getId());
         map.addValue("modalAwal", data.getModalAwal());
         map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("dPgunRekam", data.getDPgunRekam());
         jdbcTemplateServer.update(query,map);
     }
 

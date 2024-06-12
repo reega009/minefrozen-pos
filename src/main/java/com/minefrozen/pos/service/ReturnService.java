@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,11 @@ public class ReturnService {
                 // Save Return
                 Integer newId = noMaxDao.findNoMax("tmreturn");
                 data.setId(newId);
+
+                // Set DPgunRekam
+                Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+                data.setDPgunRekam(currentTimestamp);
+
                 dao.saveReturn(data);
                 noMaxDao.updateTrNomax("tmreturn");
 

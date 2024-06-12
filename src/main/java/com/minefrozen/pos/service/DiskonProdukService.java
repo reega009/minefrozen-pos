@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,11 @@ public class DiskonProdukService {
     public void save(DiskonProdukDto.DiskonProduk data){
         Integer newId = noMaxDao.findNoMax("tmdiskonproduk");
         data.setId(newId);
+
+        // Set DPgunRekam
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        data.setDPgunRekam(currentTimestamp);
+
         dao.save(data);
         noMaxDao.updateTrNomax("tmdiskonproduk");
     }

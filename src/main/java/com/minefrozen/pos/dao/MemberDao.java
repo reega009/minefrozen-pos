@@ -140,7 +140,7 @@ public class MemberDao {
                 "true,\n" +
                 ":discMember,\n" +
                 ":iPgunRekam,\n" +
-                "CURRENT_TIMESTAMP)\n";
+                ":dPgunRekam\n)\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", data.getId());
         map.addValue("idStore", data.getIdStore());
@@ -149,6 +149,7 @@ public class MemberDao {
         map.addValue("nomorHandphone", data.getNomorHandphone());
         map.addValue("discMember", data.getDiscMember());
         map.addValue("iPgunRekam", data.getIPgunRekam());
+        map.addValue("dPgunRekam", data.getDPgunRekam());
         jdbcTemplate.update(query,map);
     }
 
