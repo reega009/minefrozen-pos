@@ -21,7 +21,7 @@ public class SaldoAwalService {
     private TrnomaxDao noMaxDao;
 
     public Optional<SaldoAwalDto.SaldoAwal> findByTanggalSekarang(Integer nomorKasir, Integer idStore, Date tanggalSekarang){
-        return dao.findByTanggalSekarang(nomorKasir, idStore, tanggalSekarang);
+        return dao.findByTanggalSekarang(nomorKasir, idStore, new Timestamp(System.currentTimeMillis()));
     }
 
     public void save(SaldoAwalDto.SaldoAwal request){
