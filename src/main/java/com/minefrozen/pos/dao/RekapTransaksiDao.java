@@ -23,7 +23,7 @@ public class RekapTransaksiDao {
 
     public List<RekapTransaksiDto.Transaksi> findAll(Integer idStore, Integer nomorKasir, Integer shift, Date tanggal){
         String query = "select \n" +
-                "\tcoalesce((select\n" +
+                "\tcoalesce((select distinct\n" +
                 "\t\ttsal.modal_awal\n" +
                 "\tfrom\n" +
                 "\t\ttmsaldoawal tsal\n" +
