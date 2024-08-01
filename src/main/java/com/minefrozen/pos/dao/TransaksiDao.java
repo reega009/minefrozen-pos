@@ -1,15 +1,20 @@
 package com.minefrozen.pos.dao;
 
+import com.minefrozen.pos.dto.ProdukDto;
 import com.minefrozen.pos.dto.TransaksiDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class TransaksiDao {
@@ -62,6 +67,33 @@ public class TransaksiDao {
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("idStore", idStore);
         return jdbcTemplate.queryForObject(query, map, Integer.class);
+    }
+
+    public Optional<Integer> checkIfTrxExist(Integer idStore, Integer nomorKasir, Timestamp tanggalTransaksi, Integer jenisPembayaran, String namaKasir, BigDecimal totalHarga){
+        String query = "SELECT DISTINCT\n" +
+                "    1\n" +
+                "FROM\n" +
+                "    tmtransaksi t\n" +
+                "WHERE\n" +
+                "    id_store = :idStore\n" +
+                "    AND nomor_kasir = :nomorKasir\n" +
+                "    AND d_pgun_rekam BETWEEN (CAST(:tanggalTransaksi AS TIMESTAMP) - INTERVAL '1 minute') AND CAST(:tanggalTransaksi AS TIMESTAMP)\n" +
+                "    AND jenis_pembayaran = :jenisPembayaran\n" +
+                "    AND nama_kasir = :namaKasir\n" +
+                "    AND total_harga = :totalHarga;";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("idStore", idStore);
+        map.addValue("nomorKasir", nomorKasir);
+        map.addValue("tanggalTransaksi", tanggalTransaksi);
+        map.addValue("jenisPembayaran", jenisPembayaran);
+        map.addValue("namaKasir", namaKasir);
+        map.addValue("totalHarga", totalHarga);
+        try {
+            Integer data = jdbcTemplate.queryForObject(query, map, Integer.class);
+            return Optional.ofNullable(data);
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     public List<TransaksiDto.Transaksi> findAll(Integer idStore, Integer nomorKasir, Integer shift, Date tanggalAwal, Date tanggalAkhir){

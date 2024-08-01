@@ -2,9 +2,13 @@ package com.minefrozen.pos.service;
 
 import com.minefrozen.pos.dao.TransaksiDao;
 import com.minefrozen.pos.dao.TrnomaxDao;
+import com.minefrozen.pos.dto.CostumMessage;
 import com.minefrozen.pos.dto.TransaksiDto;
+import com.minefrozen.pos.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -52,6 +57,13 @@ public class TransaksiService {
             // Create Kode
             String newKode = String.format("TRX-%s-%04d", formattedDate, newNomor);
             log.info("New Kode : {}, New Id : {}", newKode, newId);
+
+            // Check Trx Handle For Duplicate
+            Optional<Integer> checkDupl = dao.checkIfTrxExist(request.getIdStore(), request.getNomorKasir(), currentTimestamp, request.getJenisPembayaran(), request.getNamaKasir(), request.getTotalHargaPerTransaksi());
+            if (checkDupl.isPresent()) {
+                log.info("TRANSAKSI DUPLICATE!!! {}", newKode);
+                return  "Transaksi Duplicate Terdeteksi!";
+            }
 
             // Save Proses
             request.setId(newId);

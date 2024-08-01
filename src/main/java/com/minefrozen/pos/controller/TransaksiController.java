@@ -43,6 +43,7 @@ public class TransaksiController {
         data.setIPgunRekam(pengguna.get().getId());
 
         try {
+
             log.info("Request : {}", data);
             String kodeFaktur = service.TambahTransaksi(data);
             return ResponseEntity.ok(new CostumMessage(HttpStatus.OK, kodeFaktur));
